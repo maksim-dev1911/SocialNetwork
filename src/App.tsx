@@ -1,11 +1,11 @@
 import React from 'react';
+import './App.scss'
+import Router from "./components/App/Router/Router";
 
 const App = () => {
     return (
-        <div>
-
-        </div>
+        <Router/>
     );
 };
 
-export default App;
+export default React.memo(App);
