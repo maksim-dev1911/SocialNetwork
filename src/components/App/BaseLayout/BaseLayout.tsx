@@ -1,17 +1,21 @@
-import React, {useCallback, useState} from 'react';
-import Header from "../../Header/Header/Header";
+import React from 'react';
 import {Outlet} from "react-router-dom";
-import SideBar from "../../SideBar/SideBar";
+import SideBarContainer from "../../SideBar/SideBarContainer";
 
 const BaseLayout = () => {
-    const [isOpened, setIsOpened] = useState(false);
-    const handleOpen = useCallback(() => setIsOpened(true), []);
-    const handleClose = useCallback(() => setIsOpened(false), []);
+    const [open, setOpen] = React.useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
     return (
         <>
-            <Header/>
-            <SideBar setOpen={handleOpen} open={isOpened} setClose={handleClose}/>
+            <SideBarContainer open={open} setOpen={handleDrawerOpen} setClose={handleDrawerClose}/>
             <Outlet/>
         </>
     );
