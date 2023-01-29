@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
 import classes from './UserMenu.module.scss';
-import userLogo from '../../../../images/userAvatar.png';
+import userLogo from '../../../../../images/userAvatar.png';
 import DropDown from "../DropDown/DropDown";
 
-const UserMenu = () => {
+type PropsType = {
+
+}
+
+const UserMenu: React.FC<PropsType> = () => {
     const [openProfile, setOpenProfile] = useState(false)
 
     return (

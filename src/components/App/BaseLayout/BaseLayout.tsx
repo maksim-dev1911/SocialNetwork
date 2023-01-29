@@ -1,24 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
+
+import Box from '@mui/material/Box';
+import {Container, CssBaseline} from "@mui/material";
+
+import Header from "../../SideBar/Header/Header";
+import SideBar from "../../SideBar/SideBar";
 import {Outlet} from "react-router-dom";
-import SideBarContainer from "../../SideBar/SideBarContainer";
+import sx from './BaseLayout.style';
 
 const BaseLayout = () => {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
-    const handleDrawerOpen = () => {
+    const handleOpen = () => {
         setOpen(true);
     };
 
-    const handleDrawerClose = () => {
+    const handleClose = () => {
         setOpen(false);
     };
 
     return (
-        <>
-            <SideBarContainer open={open} setOpen={handleDrawerOpen} setClose={handleDrawerClose}/>
-            <Outlet/>
-        </>
+        <Container maxWidth={false} disableGutters>
+            <Box sx={{display: 'flex'}}>
+                <CssBaseline/>
+                <Header open={open} setOpen={handleOpen}/>
+                <SideBar setClose={handleClose} open={open}/>
+                <Box sx={sx.content}>
+                    <Container sx={sx.container} >
+                        <Outlet/>
+                    </Container>
+                </Box>
+            </Box>
+        </Container>
     );
-};
+}
 
 export default React.memo(BaseLayout);

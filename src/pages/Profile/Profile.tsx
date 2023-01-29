@@ -1,11 +1,12 @@
 import React from 'react';
-import classes from './Profile.module.scss'
+import UserProfile from "../../components/Profile/UserProfile/UserProfile";
+import Box from "@mui/material/Box";
 
 const Profile = () => {
     return (
-        <div className={classes.profile}>
-            <h1>Profile</h1>
-        </div>
+        <Box>
+            <UserProfile/>
+        </Box>
     );
 };
 

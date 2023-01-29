@@ -1,27 +1,21 @@
-import * as React from 'react';
-import {styled, Theme, CSSObject} from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
+import React from 'react';
+import classes from "./SideBar.module.scss";
+import logoImg from "../../images/logo.png";
+import IconButton from "@mui/material/IconButton";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Typography from "@mui/material/Typography";
+import HomeIcon from "@mui/icons-material/Home";
+import EmailIcon from "@mui/icons-material/Email";
+import GroupsIcon from "@mui/icons-material/Groups";
+import {CSSObject, styled, Theme} from "@mui/material/styles";
+import MuiDrawer from "@mui/material/Drawer";
+import Link from "../Common/Link/Link";
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import HomeIcon from '@mui/icons-material/Home';
-import EmailIcon from '@mui/icons-material/Email';
-import GroupsIcon from '@mui/icons-material/Groups';
-import LogoutIcon from '@mui/icons-material/Logout';
-import logoImg from '../../images/logo.png';
-import classes from './SideBar.module.scss';
-import UserMenu from "../Header/UserMenu/UserMenu/UserMenu";
-
+import sx from './SideBar.style';
 
 const drawerWidth = 240;
 
@@ -29,18 +23,17 @@ const linkItem = [
     {
         title: 'Project',
         icon: HomeIcon,
+        path: '/profile'
     },
     {
         title: 'Messages',
         icon: EmailIcon,
+        path: '/messages'
     },
     {
         title: 'People',
         icon: GroupsIcon,
-    },
-    {
-        title: 'Logout',
-        icon: LogoutIcon,
+        path: '/people'
     },
 ]
 
@@ -51,6 +44,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
         duration: theme.transitions.duration.enteringScreen,
     }),
     overflowX: 'hidden',
+    backgroundColor: '#f9fafb',
 });
 
 const closedMixin = (theme: Theme): CSSObject => ({
@@ -63,6 +57,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     [theme.breakpoints.up('sm')]: {
         width: `calc(${theme.spacing(8)} + 1px)`,
     },
+    backgroundColor: '#f9fafb',
 });
 
 const DrawerHeader = styled('div')(({theme}) => ({
@@ -71,29 +66,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
-
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
+    ...theme.mixins.toolbar, backgroundColor: '#f9fafb',
 }));
 
 const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
@@ -116,60 +89,39 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 type PropsType = {
     open?: boolean
     setClose?: () => void
-    setOpen?: () => void
 }
 
-const MiniDrawer: React.FC<PropsType> = ({setOpen, open, setClose}) => {
+const SideBar: React.FC<PropsType> = ({open, setClose}) => {
     return (
-        <Box sx={{display: 'flex'}}>
-            <CssBaseline/>
-            <AppBar position="fixed" open={open}>
-                <Toolbar sx={{backgroundColor: 'white', display: 'flex', justifyContent: 'space-between', boxShadow: 'none' }}>
-                    <IconButton
-                        color="default"
-                        onClick={setOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && {visibility: "hidden"}),
-                        }}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <UserMenu/>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <img className={classes.logoImg} src={logoImg}/>
-                    <IconButton onClick={setClose}>
-                        <ChevronRightIcon/>
-                    </IconButton>
-                </DrawerHeader>
-                <Divider/>
-                <List>
-                    {linkItem.map((link, index) => (
-                        <ListItem key={link.title} disablePadding sx={{display: 'block'}}>
-                            <ListItemButton>
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: '18px',
-                                        mr: 3,
-                                        ml: 0.5,
-                                    }}
-                                >
-                                    <link.icon fontSize="medium"/>
-                                </ListItemIcon>
-                                <Typography variant="body2">
-                                    {link.title}
-                                </Typography>
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-        </Box>
+        <Drawer variant="permanent" open={open}>
+            <DrawerHeader sx={{display: 'flex', justifyContent: 'space-between', ml: 1}}>
+                <img alt='logo' src={logoImg}/>
+                <IconButton onClick={setClose}>
+                    <ChevronRightIcon/>
+                </IconButton>
+            </DrawerHeader>
+            <Divider/>
+            <List>
+                {linkItem.map((link) => (
+                    <ListItem key={link.title} disablePadding sx={{display: 'block'}}>
+                        <Link sx={{textDecoration: 'none',}} key={link.title} to={link.path}>
+                            {({isActive}) => (
+                                <ListItemButton sx={isActive ? sx.buttonActive : sx.button}>
+                                    <ListItemIcon sx={{minWidth: '18px', mr: 3, ml: 0.5,}}>
+                                        <link.icon fontSize="medium" color={isActive ? 'primary' : undefined}/>
+                                    </ListItemIcon>
+                                    <Typography fontFamily='Inter' color={isActive ? '' : 'textSecondary'}
+                                                variant="body2">
+                                        {link.title}
+                                    </Typography>
+                                </ListItemButton>
+                            )}
+                        </Link>
+                    </ListItem>
+                ))}
+            </List>
+        </Drawer>
     );
-}
+};
 
-export default React.memo(MiniDrawer);
+export default React.memo(SideBar);
