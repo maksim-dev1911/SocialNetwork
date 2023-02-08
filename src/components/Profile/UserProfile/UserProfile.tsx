@@ -12,7 +12,6 @@ type PropsType = {
 }
 
 const UserProfile: React.FC<PropsType> = ({profile}) => {
-
     return (
         <Box sx={sx.wrapper}>
             <div>

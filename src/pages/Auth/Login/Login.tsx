@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
-import {authMe, signIn} from "../../../store/auth/auth.thunks";
+import {signIn} from "../../../store/auth/auth.thunks";
 import LoginForm from "../../../components/auth/authForm/LoginForm";
 import {isAuthSelector} from "../../../store/auth/auth.selectors";
 
@@ -15,17 +15,13 @@ const Login = () => {
     const dispatch = useAppDispatch();
     const isAuth = useAppSelector(isAuthSelector);
 
-    useEffect(() => {
-        dispatch(authMe())
-    }, [])
-
     const handleSubmit = useCallback(
         async (data: ILoginData) => {
             await dispatch(signIn(data))
         }, []
     )
 
-    if (isAuth === true) {
+    if (isAuth) {
         return <Navigate to='/profile'/>
     }
 

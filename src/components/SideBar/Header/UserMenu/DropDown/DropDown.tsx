@@ -6,17 +6,20 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
+import {ProfileType} from "../../../../../types/types";
 
 type PropsType = {
-
+    userProfile?: ProfileType | null
+    logout: () => void
+    isAuth: boolean
 }
 
-const DropDown: React.FC<PropsType> = () => {
+const DropDown: React.FC<PropsType> = ({userProfile, logout, isAuth}) => {
     return (
         <div className={classes.dropDown}>
             <div className={classes.dropDown__user}>
-                <img src={userLogo}/>
-                <p>Maks Shvetsov</p>
+                <img src={userProfile?.photos?.large || userLogo}/>
+                <p>{userProfile?.fullName}</p>
             </div>
             <ul>
                 <li>
@@ -32,7 +35,7 @@ const DropDown: React.FC<PropsType> = () => {
                         <IconButton size='small'>
                             <LogoutIcon/>
                         </IconButton>
-                        <Link to='/'>Logout</Link>
+                        <Link to='' onClick={logout}>Logout</Link>
                     </ListItemButton>
                 </li>
             </ul>

@@ -7,7 +7,7 @@ const sx: StylesRecord = {
     }),
     buttonActive: () => ({
         backgroundColor: 'rgba(98, 82, 206, 0.08)',
-        borderRadius: 3
+        borderRadius: 3,
     })
 }
 

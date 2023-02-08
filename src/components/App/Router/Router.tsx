@@ -1,12 +1,12 @@
 import React from 'react';
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import Login from "../../../pages/Auth/Login/Login";
 import ResetPassword from "../../../pages/Auth/ResetPassword/ResetPassword";
 import BaseLayout from "../BaseLayout/BaseLayout";
-import Messages from "../../../pages/Messages/Messages";
-import People from "../../../pages/People/People";
 import Settings from "../../../pages/Settings/Settings";
 import Profile from "../../../pages/Profile/Profile.container";
+import Messages from "../../../pages/Messages/Messages.container";
+import People from "../../../pages/Users/People.container";
 
 const Router = () => {
     return (

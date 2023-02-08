@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import {useAppDispatch, useAppSelector} from "../../hooks/redux";
 import {userProfileSelector} from "../../store/profile/profile.selectors";
 import {getUserProfile} from "../../store/profile/profile.thunks";
-import {CircularProgress} from "@mui/material";
 import {useParams} from "react-router-dom";
+import Preloader from "../../components/Common/Preloader/Preloader";
 
 const Profile = () => {
     const profile = useAppSelector(userProfileSelector)
@@ -20,9 +20,8 @@ const Profile = () => {
         dispatch(getUserProfile(userId))
     }, [])
 
-
     if (!profile) {
-        return <CircularProgress color='primary'/>
+        return <Preloader/>
     }
 
     return (

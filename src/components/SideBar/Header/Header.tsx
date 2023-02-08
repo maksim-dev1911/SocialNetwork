@@ -6,6 +6,7 @@ import UserMenu from "./UserMenu/UserMenu/UserMenu";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
+import {ProfileType} from "../../../types/types";
 
 const drawerWidth = 240;
 
@@ -34,11 +35,15 @@ const AppBar = styled(MuiAppBar, {
 type PropsType = {
     open?: boolean
     setOpen?: () => void
+    userProfile?: ProfileType | null
+    logout: () => void
+    isAuth: boolean
 }
 
-const Header: React.FC<PropsType> = ({setOpen, open}) => {
+const Header: React.FC<PropsType> = ({setOpen, open, userProfile, logout, isAuth}) => {
     return (
-        <AppBar elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)', bgcolor: 'transparent'}} position="fixed" open={open}>
+        <AppBar elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)', bgcolor: 'transparent'}}
+                position="fixed" open={open}>
             <Toolbar sx={{backgroundColor: 'white', display: 'flex', justifyContent: 'space-between'}}>
                 <IconButton
                     color="default"
@@ -51,7 +56,7 @@ const Header: React.FC<PropsType> = ({setOpen, open}) => {
                 >
                     <MenuIcon/>
                 </IconButton>
-                <UserMenu />
+                <UserMenu isAuth={isAuth} logout={logout} userProfile={userProfile}/>
             </Toolbar>
         </AppBar>
     );

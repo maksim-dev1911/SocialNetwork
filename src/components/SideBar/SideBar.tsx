@@ -21,7 +21,7 @@ const drawerWidth = 240;
 
 const linkItem = [
     {
-        title: 'Project',
+        title: 'Profile',
         icon: HomeIcon,
         path: '/profile'
     },
@@ -31,7 +31,7 @@ const linkItem = [
         path: '/messages'
     },
     {
-        title: 'People',
+        title: 'Users',
         icon: GroupsIcon,
         path: '/people'
     },
