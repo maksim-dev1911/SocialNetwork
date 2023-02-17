@@ -7,14 +7,19 @@ import Settings from "../../../pages/Settings/Settings";
 import Profile from "../../../pages/Profile/Profile.container";
 import Messages from "../../../pages/Messages/Messages.container";
 import People from "../../../pages/Users/People.container";
+import {useAppSelector} from "../../../hooks/redux";
+import {currentUserIdSelector} from "../../../store/auth/auth.selectors";
+
 
 const Router = () => {
+    const userId = useAppSelector(currentUserIdSelector);
     return (
         <>
             <Routes>
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/resetPass' element={<ResetPassword/>}/>
                 <Route path='/' element={<BaseLayout/>}>
+                    <Route index element={<Navigate to={`/profile/${userId}`}/>}/>
                     <Route path='/profile/:userId?' element={<Profile/>}/>
                     <Route path='/messages' element={<Messages/>}/>
                     <Route path='/people' element={<People/>}/>

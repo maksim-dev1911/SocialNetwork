@@ -1,17 +1,16 @@
 import React, {useState} from 'react';
-import classes from './UserMenu.module.scss';
 import userLogo from '../../../../../images/userAvatar.png';
 import DropDown from "../DropDown/DropDown";
 import {ProfileType} from "../../../../../types/types";
-import {Avatar} from "@mui/material";
+import {Stack} from "@mui/material";
+import { Avatar } from '../UserMenu.style';
 
 type PropsType = {
-    userProfile?: ProfileType | null
+    currentUserProfile?: ProfileType | null
     logout: () => void
-    isAuth: boolean
 }
 
-const UserMenu: React.FC<PropsType> = ({userProfile, logout, isAuth}) => {
+const UserMenu: React.FC<PropsType> = ({currentUserProfile, logout}) => {
     const [openProfile, setOpenProfile] = useState(false)
 
     const handleOpenProfile = () => {
@@ -19,16 +18,16 @@ const UserMenu: React.FC<PropsType> = ({userProfile, logout, isAuth}) => {
     }
 
     return (
-        <div className={classes.userMenu}>
-            <div>
-                <Avatar onClick={handleOpenProfile} src={userProfile?.photos?.large || userLogo}/>
-            </div>
+        <Stack position='relative'>
+            <Avatar>
+                <img onClick={handleOpenProfile} src={currentUserProfile?.photos?.large || userLogo} alt='avatar'/>
+            </Avatar>
             <div>
                 {openProfile && (
-                    <DropDown isAuth={isAuth} logout={logout} userProfile={userProfile}/>
+                    <DropDown currentUserProfile={currentUserProfile} logout={logout}/>
                 )}
             </div>
-        </div>
+        </Stack>
     );
 };
 

@@ -1,12 +1,14 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {ProfileType} from "../../types/types";
+import {PhotosType, ProfileType} from "../../types/types";
 
 type initialStateType = {
     profile: ProfileType | null
+    userPhoto: PhotosType | null
 }
 
 const initialState: initialStateType = {
-    profile: null
+    profile: null,
+    userPhoto: null
 }
 
 const profileSlice = createSlice({
@@ -15,10 +17,13 @@ const profileSlice = createSlice({
     reducers: {
         setUserProfile: (state, action: PayloadAction<ProfileType>) => {
             state.profile = action.payload
+        },
+        setPhoto: (state, action) => {
+            state.userPhoto = action.payload
         }
     }
 })
 
-export const {setUserProfile} = profileSlice.actions
+export const {setUserProfile, setPhoto} = profileSlice.actions
 
 export default profileSlice.reducer;

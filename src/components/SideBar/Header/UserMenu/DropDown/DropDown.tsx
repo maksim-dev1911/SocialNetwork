@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from './DropDown.module.scss';
 import {Link} from "react-router-dom";
 import userLogo from "../../../../../images/userAvatar.png";
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -7,39 +6,42 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
 import {ProfileType} from "../../../../../types/types";
+import {Stack} from "@mui/material";
+import sx, {Avatar, LinkContainer} from "../UserMenu.style";
 
 type PropsType = {
-    userProfile?: ProfileType | null
+    currentUserProfile?: ProfileType | null
     logout: () => void
-    isAuth: boolean
 }
 
-const DropDown: React.FC<PropsType> = ({userProfile, logout, isAuth}) => {
+const DropDown: React.FC<PropsType> = ({logout, currentUserProfile}) => {
     return (
-        <div className={classes.dropDown}>
-            <div className={classes.dropDown__user}>
-                <img src={userProfile?.photos?.large || userLogo}/>
-                <p>{userProfile?.fullName}</p>
-            </div>
-            <ul>
-                <li>
-                    <ListItemButton sx={{p: 0}}>
-                        <IconButton size='small'>
-                            <SettingsIcon/>
-                        </IconButton>
+        <Stack sx={sx.dropDown}>
+            <Stack sx={sx.userInfo}>
+                <Avatar>
+                    <img src={currentUserProfile?.photos?.large || userLogo} alt='avatar'/>
+                    <p>{currentUserProfile?.fullName}</p>
+                </Avatar>
+            </Stack>
+            <Stack sx={{textDecoration: 'none'}}>
+                <ListItemButton sx={{p: "5px", mt: "5px", '&:hover': {borderRadius: '5px'}}}>
+                    <IconButton size='small'>
+                        <SettingsIcon/>
+                    </IconButton>
+                    <LinkContainer>
                         <Link to='/settings'>Settings</Link>
-                    </ListItemButton>
-                </li>
-                <li>
-                    <ListItemButton sx={{p: 0}}>
-                        <IconButton size='small'>
-                            <LogoutIcon/>
-                        </IconButton>
+                    </LinkContainer>
+                </ListItemButton>
+                <ListItemButton sx={{p: "5px", mt: "5px"}}>
+                    <IconButton size='small'>
+                        <LogoutIcon/>
+                    </IconButton>
+                    <LinkContainer>
                         <Link to='' onClick={logout}>Logout</Link>
-                    </ListItemButton>
-                </li>
-            </ul>
-        </div>
+                    </LinkContainer>
+                </ListItemButton>
+            </Stack>
+        </Stack>
     );
 };
 

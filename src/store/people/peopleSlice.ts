@@ -7,6 +7,7 @@ type initialStateType = {
     pageSize: number
     totalUsersCount: number
     isFetching: boolean
+    followed: boolean
 }
 
 const initialState: initialStateType = {
@@ -14,7 +15,8 @@ const initialState: initialStateType = {
     currentPage: 1,
     pageSize: 12,
     totalUsersCount: 0,
-    isFetching: false,
+    isFetching: true,
+    followed: false,
 }
 
 const peopleSlice = createSlice({
@@ -30,12 +32,23 @@ const peopleSlice = createSlice({
         setTotalUsersCount: (state, action: PayloadAction<number>) => {
             state.totalUsersCount = action.payload
         },
-        setIsFetching: (state, action) => {
+        setIsFetching: (state, action: PayloadAction<boolean>) => {
             state.isFetching = action.payload
         },
+        getFollowedUsers: (state, action: PayloadAction<boolean>) => {
+            state.followed = action.payload
+        },
+        updateUsers: (state, action: PayloadAction<{id: number, user: Partial<UserType>}>) => {
+            state.users = state.users.map(user => {
+                if (user.id === action.payload.id) {
+                    return {...user, ...action.payload.user}
+                }
+                return user
+            })
+        }
     }
 })
 
-export const {setUsers, setCurrentPage, setIsFetching, setTotalUsersCount} = peopleSlice.actions
+export const {setUsers, setCurrentPage, setIsFetching, setTotalUsersCount, getFollowedUsers, updateUsers} = peopleSlice.actions
 
 export default peopleSlice.reducer

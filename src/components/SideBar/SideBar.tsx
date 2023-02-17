@@ -1,5 +1,4 @@
 import React from 'react';
-import classes from "./SideBar.module.scss";
 import logoImg from "../../images/logo.png";
 import IconButton from "@mui/material/IconButton";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -18,24 +17,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import sx from './SideBar.style';
 
 const drawerWidth = 240;
-
-const linkItem = [
-    {
-        title: 'Profile',
-        icon: HomeIcon,
-        path: '/profile'
-    },
-    {
-        title: 'Messages',
-        icon: EmailIcon,
-        path: '/messages'
-    },
-    {
-        title: 'Users',
-        icon: GroupsIcon,
-        path: '/people'
-    },
-]
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -89,13 +70,33 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 type PropsType = {
     open?: boolean
     setClose?: () => void
+    userId?: number
 }
 
-const SideBar: React.FC<PropsType> = ({open, setClose}) => {
+const SideBar: React.FC<PropsType> = ({open, setClose, userId}) => {
+    const linkItem = [
+        {
+            title: 'Profile',
+            icon: HomeIcon,
+            path: `/profile/${userId}`,
+        },
+        {
+            title: 'Messages',
+            icon: EmailIcon,
+            path: '/messages'
+        },
+        {
+            title: 'People',
+            icon: GroupsIcon,
+            path: '/people'
+        },
+    ]
     return (
         <Drawer variant="permanent" open={open}>
             <DrawerHeader sx={{display: 'flex', justifyContent: 'space-between', ml: 1}}>
-                <img alt='logo' src={logoImg}/>
+                <Link to={`/profile/${userId}`}>
+                    <img alt='logo' src={logoImg}/>
+                </Link>
                 <IconButton onClick={setClose}>
                     <ChevronRightIcon/>
                 </IconButton>
@@ -104,7 +105,7 @@ const SideBar: React.FC<PropsType> = ({open, setClose}) => {
             <List>
                 {linkItem.map((link) => (
                     <ListItem key={link.title} disablePadding sx={{display: 'block'}}>
-                        <Link sx={{textDecoration: 'none',}} key={link.title} to={link.path}>
+                        <Link sx={{textDecoration: 'none'}} key={link.title} to={link.path}>
                             {({isActive}) => (
                                 <ListItemButton sx={isActive ? sx.buttonActive : sx.button}>
                                     <ListItemIcon sx={{minWidth: '18px', mr: 3, ml: 0.5,}}>

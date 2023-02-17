@@ -35,12 +35,11 @@ const AppBar = styled(MuiAppBar, {
 type PropsType = {
     open?: boolean
     setOpen?: () => void
-    userProfile?: ProfileType | null
+    currentUserProfile?: ProfileType | null
     logout: () => void
-    isAuth: boolean
 }
 
-const Header: React.FC<PropsType> = ({setOpen, open, userProfile, logout, isAuth}) => {
+const Header: React.FC<PropsType> = ({setOpen, open, currentUserProfile, logout}) => {
     return (
         <AppBar elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)', bgcolor: 'transparent'}}
                 position="fixed" open={open}>
@@ -56,7 +55,7 @@ const Header: React.FC<PropsType> = ({setOpen, open, userProfile, logout, isAuth
                 >
                     <MenuIcon/>
                 </IconButton>
-                <UserMenu isAuth={isAuth} logout={logout} userProfile={userProfile}/>
+                <UserMenu logout={logout} currentUserProfile={currentUserProfile}/>
             </Toolbar>
         </AppBar>
     );

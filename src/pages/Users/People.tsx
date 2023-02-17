@@ -1,24 +1,35 @@
 import React, {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from "../../hooks/redux";
-import {getUsers} from "../../store/people/people.thunks";
+import {follow, followed, getUsers, unfollow} from "../../store/people/people.thunks";
 import {
-    getCurrentPage,
+    getCurrentPage, getIsFetchingSelector,
     getPageSize,
     getTotalUsersCount,
     getUsersSelector
 } from "../../store/people/people.selectors";
 import Users from "../../components/Users/Users";
+import Preloader from "../../components/Common/Preloader/Preloader";
 
 const People = () => {
     const users = useAppSelector(getUsersSelector)
     const currentPage = useAppSelector(getCurrentPage)
     const pageSize = useAppSelector(getPageSize)
     const totalUsersCount = useAppSelector(getTotalUsersCount)
+    const isFetching = useAppSelector(getIsFetchingSelector)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         onPageChanged(currentPage)
+        dispatch(followed(27869))
     }, [currentPage])
+
+    const handleFollow = (id: number) => {
+        dispatch(follow(id))
+    }
+
+    const handleUnfollow = (id: number) => {
+        dispatch(unfollow(id))
+    }
 
     const onPageChanged = (currentPage: number) => {
         dispatch(getUsers({currentPage, pageSize}))
@@ -28,10 +39,21 @@ const People = () => {
         onPageChanged(page);
     }
 
+    if (isFetching) {
+        return <Preloader/>
+    }
+
     return (
         <div>
-            <Users pageChanged={handlePageChanged} currentPage={currentPage} pageSize={pageSize} users={users}
-                   totalUsersCount={totalUsersCount}/>
+            <Users
+                pageChanged={handlePageChanged}
+                currentPage={currentPage}
+                pageSize={pageSize}
+                users={users}
+                totalUsersCount={totalUsersCount}
+                follow={handleFollow}
+                unfollow={handleUnfollow}
+            />
         </div>
     );
 };

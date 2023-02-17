@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {ProfileType} from "../../types/types";
 
 export type IUser = {
     id: number
@@ -9,11 +10,13 @@ export type IUser = {
 type initialStateType = {
     currentUser: IUser | null
     isAuth: boolean
+    currentUserProfile: ProfileType | null
 }
 
 const initialState: initialStateType = {
     currentUser: null,
     isAuth: false,
+    currentUserProfile: null
 }
 
 const authSlice = createSlice({
@@ -24,9 +27,12 @@ const authSlice = createSlice({
             state.currentUser = action.payload
             state.isAuth = true
         },
+        currentUserProfile: (state, action:PayloadAction<ProfileType>) => {
+            state.currentUserProfile = action.payload
+        }
     },
 })
 
-export const {setAuthUserData} = authSlice.actions
+export const {setAuthUserData, currentUserProfile} = authSlice.actions
 
 export default authSlice.reducer;

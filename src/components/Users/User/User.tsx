@@ -9,9 +9,11 @@ import {Link} from "react-router-dom";
 
 type PropsType = {
     user: UserType
+    follow: (id: number) => void
+    unfollow: (id: number) => void
 }
 
-const User: React.FC<PropsType> = ({user}) => {
+const User: React.FC<PropsType> = ({user, follow, unfollow}) => {
     return (
         <Grid item>
             <Box sx={sx.wrapper}>
@@ -21,7 +23,10 @@ const User: React.FC<PropsType> = ({user}) => {
                     </Link>
                 </Avatar>
                 <Typography sx={sx.userName}>{user.name}</Typography>
-                <Button fullWidth variant='contained'>Following</Button>
+                {user.followed
+                    ? <Button fullWidth variant='contained' onClick={() => {unfollow(user.id)}}>Unfollow</Button>
+                    : <Button fullWidth variant='contained' onClick={() => {follow(user.id)}}>Follow</Button>
+                }
             </Box>
         </Grid>
     );

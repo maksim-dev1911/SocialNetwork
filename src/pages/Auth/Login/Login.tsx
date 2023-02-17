@@ -3,7 +3,7 @@ import {Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {signIn} from "../../../store/auth/auth.thunks";
 import LoginForm from "../../../components/auth/authForm/LoginForm";
-import {isAuthSelector} from "../../../store/auth/auth.selectors";
+import {currentUserIdSelector, isAuthSelector} from "../../../store/auth/auth.selectors";
 
 export type ILoginData = {
     email: string
@@ -13,6 +13,7 @@ export type ILoginData = {
 
 const Login = () => {
     const dispatch = useAppDispatch();
+    const userId = useAppSelector(currentUserIdSelector);
     const isAuth = useAppSelector(isAuthSelector);
 
     const handleSubmit = useCallback(
@@ -22,7 +23,7 @@ const Login = () => {
     )
 
     if (isAuth) {
-        return <Navigate to='/profile'/>
+        return <Navigate to={`/profile/${userId}`}/>
     }
 
     return (

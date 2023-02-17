@@ -10,14 +10,16 @@ type PropsType = {
     pageChanged: (_: any, page: number) => void
     pageSize: number
     totalUsersCount: number
+    follow: (id: number) => void
+    unfollow: (id: number) => void
 }
 
-const Users: React.FC<PropsType> = ({users, pageSize, pageChanged, currentPage, totalUsersCount}) => {
+const Users: React.FC<PropsType> = ({users, follow, unfollow, pageSize, pageChanged, currentPage, totalUsersCount}) => {
     return (
         <>
             <Grid sx={sx.gridContainer} container>
                 {users.map((user) => (
-                    <User user={user}/>
+                    <User follow={follow} unfollow={unfollow} user={user}/>
                 ))}
             </Grid>
             <Stack display='flex' alignItems='center' mt={2}>
