@@ -36,10 +36,10 @@ type PropsType = {
     open?: boolean
     setOpen?: () => void
     currentUserProfile?: ProfileType | null
-    logout: () => void
+    openModal: () => void
 }
 
-const Header: React.FC<PropsType> = ({setOpen, open, currentUserProfile, logout}) => {
+const Header: React.FC<PropsType> = ({setOpen, open, currentUserProfile, openModal}) => {
     return (
         <AppBar elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)', bgcolor: 'transparent'}}
                 position="fixed" open={open}>
@@ -55,7 +55,7 @@ const Header: React.FC<PropsType> = ({setOpen, open, currentUserProfile, logout}
                 >
                     <MenuIcon/>
                 </IconButton>
-                <UserMenu logout={logout} currentUserProfile={currentUserProfile}/>
+                <UserMenu openModal={openModal} currentUserProfile={currentUserProfile}/>
             </Toolbar>
         </AppBar>
     );

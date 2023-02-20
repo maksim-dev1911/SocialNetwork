@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {currentUserProfile, setAuthUserData} from "./authSlice";
+import {currentUserProfile, setAuthUserData, setIsAuthSignUp, setIsFetching} from "./authSlice";
 import {ILoginData} from "../../pages/Auth/Login/Login";
 import {api} from "../../api";
 
@@ -26,8 +26,10 @@ export const signIn = createAsyncThunk(
 export const signUp = createAsyncThunk(
     'auth/signUp',
     async (_, {dispatch}) => {
+        dispatch(setIsFetching(true))
         await api.delete('auth/login')
-        dispatch(getAuthUserData())
+        dispatch(setIsAuthSignUp())
+        dispatch(setIsFetching(false))
     }
 )
 

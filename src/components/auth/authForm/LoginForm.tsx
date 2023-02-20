@@ -83,7 +83,7 @@ const LoginForm: React.FC<PropsType> = ({
                         />
                         <div className={classes.auth__lostPass}>
                             <span>
-                                <Link to='/lostPas'>{lostPass}</Link>
+                                <Link to='/resetPass'>{lostPass}</Link>
                             </span>
                         </div>
                     </div>

@@ -56,6 +56,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
         flexShrink: 0,
         whiteSpace: 'nowrap',
         boxSizing: 'border-box',
+        borderRight: "1px dashed rgba(145, 158, 171, 0.24)",
         ...(open && {
             ...openedMixin(theme),
             '& .MuiDrawer-paper': openedMixin(theme),

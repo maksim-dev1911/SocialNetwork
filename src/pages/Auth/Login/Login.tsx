@@ -3,7 +3,8 @@ import {Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {signIn} from "../../../store/auth/auth.thunks";
 import LoginForm from "../../../components/auth/authForm/LoginForm";
-import {currentUserIdSelector, isAuthSelector} from "../../../store/auth/auth.selectors";
+import {currentUserIdSelector, isAuthSelector, isFetchingSignUp} from "../../../store/auth/auth.selectors";
+import Preloader from "../../../components/Common/Preloader/Preloader";
 
 export type ILoginData = {
     email: string
@@ -14,6 +15,7 @@ export type ILoginData = {
 const Login = () => {
     const dispatch = useAppDispatch();
     const userId = useAppSelector(currentUserIdSelector);
+    const isFetching = useAppSelector(isFetchingSignUp);
     const isAuth = useAppSelector(isAuthSelector);
 
     const handleSubmit = useCallback(
@@ -21,6 +23,10 @@ const Login = () => {
             await dispatch(signIn(data))
         }, []
     )
+
+    if (isFetching) {
+        return <Preloader/>
+    }
 
     if (isAuth) {
         return <Navigate to={`/profile/${userId}`}/>

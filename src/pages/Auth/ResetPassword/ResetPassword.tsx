@@ -31,7 +31,7 @@ const ResetPassword = () => {
                                 <div>
                                     <button>Reset password</button>
                                 </div>
-                                <Link to='/auth'>
+                                <Link to='/login'>
                                     Back to Login
                                 </Link>
                             </div>
