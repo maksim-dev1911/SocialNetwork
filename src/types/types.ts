@@ -3,10 +3,25 @@ export type PhotosType = {
     large: string | undefined
 }
 
+export type ContactsType = {
+    github: string
+    vk: string
+    facebook: string
+    instagram: string
+    twitter: string
+    website: string
+    youtube: string
+    mainLink: string
+}
+
 export type ProfileType = {
     userId?: number
-    fullName?: string
+    fullName: string
+    aboutMe: string
+    lookingForAJob: boolean
+    lookingForAJobDescription: string
     photos?: PhotosType
+    contacts: ContactsType
 }
 
 export type IUser = {

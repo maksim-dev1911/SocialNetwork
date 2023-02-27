@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import MuiModal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
@@ -17,17 +17,17 @@ const style = {
 };
 
 type PropsType = {
-    modal: boolean
+    openModal: boolean
     closeModal: () => void
     fnToAccept: () => void
 }
 
-const Modals: React.FC<PropsType> = ({modal, closeModal, fnToAccept}) => {
+const Modal: React.FC<PropsType> = ({openModal, closeModal, fnToAccept}) => {
     return (
         <div>
-            <Modal
+            <MuiModal
                 keepMounted
-                open={modal}
+                open={openModal}
                 onClose={closeModal}
                 aria-labelledby="keep-mounted-modal-title"
                 aria-describedby="keep-mounted-modal-description"
@@ -44,9 +44,9 @@ const Modals: React.FC<PropsType> = ({modal, closeModal, fnToAccept}) => {
                         <Button size='small' variant='contained' onClick={closeModal}>Cancel</Button>
                     </Box>
                 </Box>
-            </Modal>
+            </MuiModal>
         </div>
     );
 }
 
-export default React.memo(Modals)
+export default React.memo(Modal)

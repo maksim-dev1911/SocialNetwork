@@ -1,10 +1,14 @@
-import React from 'react';
-import {PhotoCamera} from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
+import React, {useCallback} from 'react';
 import {savePhoto} from "../../store/profile/profile.thunks";
-import {useAppDispatch} from "../../hooks/redux";
+import {useAppDispatch, useAppSelector} from "../../hooks/redux";
+import {currentUserProfileSelector} from "../../store/auth/auth.selectors";
+import Box from "@mui/material/Box";
+import BasicSettings from "../../components/Settings/BasicSettings";
+import {saveSettings} from "../../store/settings/settings.thunks";
+import {SettingsFormValues} from "../../components/Settings/SettingsForm";
 
 const Settings = () => {
+    const currentUserProfile = useAppSelector(currentUserProfileSelector);
     const dispatch = useAppDispatch();
 
     const selectProfileAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,14 +18,16 @@ const Settings = () => {
         }
     }
 
+    const handleSubmit = useCallback(
+        async (data: SettingsFormValues) => {
+            dispatch(saveSettings(data))
+        }, []
+    )
+
     return (
-        <div>
-            <h1>Settings</h1>
-            <IconButton color="primary" aria-label="upload picture" component="label">
-                <input onChange={selectProfileAvatar} hidden accept="image/*" type="file" />
-                <PhotoCamera />
-            </IconButton>
-        </div>
+        <Box>
+            <BasicSettings handleSubmit={handleSubmit} currentUserProfile={currentUserProfile} selectAvatar={selectProfileAvatar}/>
+        </Box>
     );
 };
 

@@ -13,7 +13,7 @@ import {
     currentUserIdSelector,
     currentUserProfileSelector,
 } from "../../../store/auth/auth.selectors";
-import Modals from "../../Common/Modal/Modal";
+import Modal from "../../Common/Modal/Modal";
 
 const BaseLayout = () => {
     const userId = useAppSelector(currentUserIdSelector);
@@ -21,7 +21,7 @@ const BaseLayout = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const [modal, setOpenModal] = useState(false);
+    const [isModalOpen, setOpenModal] = useState(false);
     const openModal = () => setOpenModal(true);
     const closeModal = () => setOpenModal(false);
 
@@ -43,7 +43,7 @@ const BaseLayout = () => {
     }, [dispatch])
 
     const renderModal = () => (
-        <Modals fnToAccept={handleLogout} modal={modal} closeModal={closeModal}/>
+        <Modal fnToAccept={handleLogout} openModal={isModalOpen} closeModal={closeModal}/>
     )
 
     return (
