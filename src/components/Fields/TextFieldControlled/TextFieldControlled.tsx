@@ -19,13 +19,15 @@ const TextFieldControlled: React.FC<PropsType> = ({label, size, name, sx, valida
                validate={validate}
         >
             {({input, meta}) => {
+                const isError = Boolean(meta.touched && (meta.error || meta.submitError));
                 return (
                     <TextField
                         {...input}
                         type={type}
-                        error={meta.error}
+                        error={isError}
                         label={label}
                         size={size}
+                        helperText={isError ? meta.error || meta.submitError : undefined}
                         sx={sx}
                     />
 

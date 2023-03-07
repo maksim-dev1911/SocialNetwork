@@ -17,7 +17,7 @@ const sx: StylesRecord = {
 
 export const Banner = styled('div')(
     () => `
-    position: relative;
+    
     display: flex;
     justify-content: center;
   img {

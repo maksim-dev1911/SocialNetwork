@@ -59,28 +59,9 @@ const BasicSettings: React.FC<PropsType> = ({currentUserProfile, selectAvatar, h
                             <Avatar src={currentUserProfile?.photos?.large}
                                     sx={{width: 90, height: 90, position: 'relative'}}></Avatar>
                             <Tooltip title='Avatar upload'>
-                                <Box sx={{
-                                    position: 'absolute',
-                                    left: 0,
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0,
-                                }}>
-                                    <Typography sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: "300ms",
-                                        borderRadius: "50%",
-                                        color: "rgba(0,0,0, 0)",
-                                        height: "100%",
-                                        '&:hover': {
-                                            background: "rgba(47, 55, 70, 0.5)",
-                                            borderRadius: "50%",
-                                            color: "white",
-                                            transition: "300ms",
-                                        }
-                                    }}><LocalSeeOutlinedIcon sx={{mr: '2px'}}/>Select</Typography>
+                                <Box sx={sx.selectButtonContainer}>
+                                    <Typography sx={sx.selectButton}><LocalSeeOutlinedIcon
+                                        sx={{mr: '2px'}}/>Select</Typography>
                                 </Box>
                             </Tooltip>
                         </Box>

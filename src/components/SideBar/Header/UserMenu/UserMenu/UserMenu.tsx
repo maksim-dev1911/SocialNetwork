@@ -30,7 +30,7 @@ const AccountMenu: React.FC<PropsType> = ({currentUserProfile, openModal}) => {
     };
 
     const redirectToProfile = () => {
-        navigate('profile')
+        navigate(`profile/${currentUserProfile?.userId}`)
     }
 
     return (

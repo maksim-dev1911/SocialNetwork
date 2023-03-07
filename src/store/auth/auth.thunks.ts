@@ -1,5 +1,12 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {currentUserProfile, setAuthUserData, setIsAuthSignUp, setIsFetching} from "./authSlice";
+import {
+    currentUserProfile,
+    setAuthUserData,
+    getError,
+    setIsAuthSignUp,
+    setIsFetching,
+    getCaptchaUrl
+} from "./authSlice";
 import {ILoginData} from "../../pages/Auth/Login/Login";
 import {api} from "../../api";
 
@@ -13,6 +20,14 @@ export const getAuthUserData = createAsyncThunk(
     }
 )
 
+export const captchaUrl = createAsyncThunk(
+    'captcha',
+    async (_, {dispatch}) => {
+        const response = await api.get('security/get-captcha-url')
+        dispatch(getCaptchaUrl(response.data.url))
+    }
+)
+
 export const signIn = createAsyncThunk(
     'auth/login',
     async (data: ILoginData, {dispatch}) => {
@@ -20,6 +35,10 @@ export const signIn = createAsyncThunk(
         if (response.data.resultCode === 0) {
             dispatch(getAuthUserData())
         }
+        if (response.data.resultCode === 10) {
+            dispatch(captchaUrl())
+        }
+        dispatch(getError(response.data.messages))
     }
 )
 

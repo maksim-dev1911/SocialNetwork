@@ -1,11 +1,14 @@
 import React from 'react';
-import classes from "./LoginForm.module.scss";
 import authBackground from "../../../images/auth-background.jpg";
-import {FormControlLabel, Stack} from "@mui/material";
-import {Link} from "react-router-dom";
-import {Form, Field} from 'react-final-form'
+import {Stack} from "@mui/material";
+import {Form} from 'react-final-form'
 import LoadingButton from '@mui/lab/LoadingButton';
 import {ILoginData} from "../../../pages/Auth/Login/Login";
+import TextFieldControlled from "../../Fields/TextFieldControlled/TextFieldControlled";
+import CheckBoxControlled from "../../Fields/CheckBoxControlled/CheckBoxControlled";
+import Typography from "@mui/material/Typography";
+import sx, {BackgroundImage} from "./LoginForm.style";
+import Validators from "../../../services/validators";
 
 type PropsType = {
     handleSubmit: (data: ILoginData) => void
@@ -14,82 +17,91 @@ type PropsType = {
     lostPass?: string
     nameBtn: string
     rememberMe?: boolean
+    error?: string
+    captchaUrl?: string
 }
 
 const LoginForm: React.FC<PropsType> = ({
-    handleSubmit,
-    title,
-    description,
-    lostPass,
-    nameBtn,
-    rememberMe
-    }) => {
+                                            handleSubmit,
+                                            title,
+                                            description,
+                                            lostPass,
+                                            nameBtn,
+                                            rememberMe,
+                                            error,
+                                            captchaUrl
+                                        }) => {
     return (
-        <div className={classes.auth}>
-            <img className={classes.bd} src={authBackground}/>
-            <div className={classes.auth__loginContent}>
-                <div className={classes.auth__tabContent}>
-                    <h1>{title}</h1>
-                    <h5>{description}</h5>
-                    <div>
-                        <Form
-                            onSubmit={handleSubmit}
-                            render={({handleSubmit, submitting}) => (
-                                <form onSubmit={handleSubmit} className={classes.auth__form}>
-                                    <Stack>
-                                        <Field
-                                            name='email'
-                                            component='input'
-                                            placeholder="Login"
-                                            className={classes.auth__input}
-                                            type='text'
-                                        />
-                                        <Field
-                                            name='password'
-                                            component='input'
-                                            placeholder="Password"
-                                            type='password'
-                                            className={classes.auth__input}
-                                        />
-                                        {rememberMe
-                                            ?
-                                            <FormControlLabel
-                                                style={{marginBottom: 10}}
-                                                label="Remember me"
-                                                control={
-                                                <Field
-                                                name='rememberMe'
-                                                component='input'
-                                                type='checkbox'
-                                                className={classes.auth__rememberMe}
-                                                />
-                                            }
-                                            />
-                                            : ''}
-
-                                        <LoadingButton
-                                            disabled={submitting}
-                                            loading={submitting}
-                                            variant="contained"
-                                            size="large"
-                                            type="submit"
-                                            fullWidth
-                                        >
-                                            {nameBtn}
-                                        </LoadingButton>
-                                    </Stack>
-                                </form>
-                            )}
-                        />
-                        <div className={classes.auth__lostPass}>
-                            <span>
-                                <Link to='/resetPass'>{lostPass}</Link>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <Stack>
+            <BackgroundImage>
+                <img src={authBackground}/>
+            </BackgroundImage>
+            <Stack sx={sx.wrapper}>
+                <Typography fontSize='24px'>{title}</Typography>
+                <Typography sx={{mt: 2, mb: 2}}>{description}</Typography>
+                <Typography sx={sx.error}>{error}</Typography>
+                <Form
+                    onSubmit={handleSubmit}
+                    render={({handleSubmit, submitting}) => (
+                        <form onSubmit={handleSubmit}>
+                            <Stack>
+                                <Stack spacing={2}>
+                                    <TextFieldControlled
+                                        type='email'
+                                        name='email'
+                                        label='Email'
+                                        size='small'
+                                        validate={Validators.compose(
+                                            Validators.required,
+                                            Validators.max(30),
+                                        )}
+                                    />
+                                    <TextFieldControlled
+                                        type='password'
+                                        name='password'
+                                        label='Password'
+                                        size='small'
+                                        validate={Validators.compose(
+                                            Validators.required,
+                                            Validators.max(20),
+                                            Validators.min(5),
+                                        )}
+                                    />
+                                </Stack>
+                                {rememberMe
+                                    ?
+                                    <CheckBoxControlled
+                                        name='rememberMe'
+                                        type='checkbox'
+                                        label="Remember me"
+                                        sx={{mt: 1, mb: 1}}
+                                    />
+                                    : ''}
+                                {captchaUrl && <Stack sx={{width: 110, maxHeight: 110, mb: 2}}>
+                                    <img src={captchaUrl}/>
+                                    <TextFieldControlled
+                                        type='text'
+                                        name='captcha'
+                                        label='Captcha'
+                                        size='small'
+                                    />
+                                </Stack>}
+                                <LoadingButton
+                                    disabled={submitting}
+                                    loading={submitting}
+                                    variant="contained"
+                                    size="large"
+                                    type="submit"
+                                    fullWidth
+                                >
+                                    {nameBtn}
+                                </LoadingButton>
+                            </Stack>
+                        </form>
+                    )}
+                />
+            </Stack>
+        </Stack>
     );
 };
 

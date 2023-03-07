@@ -12,6 +12,8 @@ type initialStateType = {
     isAuth: boolean
     currentUserProfile: ProfileType | null
     isFetching: boolean,
+    error: string
+    captcha: string
 }
 
 const initialState: initialStateType = {
@@ -19,6 +21,8 @@ const initialState: initialStateType = {
     isAuth: false,
     currentUserProfile: null,
     isFetching: false,
+    error: '',
+    captcha: ''
 }
 
 const authSlice = createSlice({
@@ -37,10 +41,16 @@ const authSlice = createSlice({
         },
         setIsFetching: (state, action: PayloadAction<boolean>) => {
             state.isFetching = action.payload
+        },
+        getError: (state, action: PayloadAction<string>) => {
+            state.error = action.payload
+        },
+        getCaptchaUrl: (state, action: PayloadAction<string>) => {
+            state.captcha = action.payload
         }
     },
 })
 
-export const {setAuthUserData, currentUserProfile, setIsAuthSignUp, setIsFetching} = authSlice.actions
+export const {setAuthUserData, currentUserProfile, setIsAuthSignUp, setIsFetching, getError, getCaptchaUrl} = authSlice.actions
 
 export default authSlice.reducer;

@@ -5,6 +5,7 @@ import {Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckBoxControlled from '../Fields/CheckBoxControlled/CheckBoxControlled';
+import Validators from '../../services/validators';
 
 export type SettingsFormValues = {
     fullName: string
@@ -27,7 +28,6 @@ type PropsType = {
 }
 
 const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
-    const required =  (value: any) => (value ? undefined : 'Required')
     return (
         <div>
             <Form
@@ -41,7 +41,7 @@ const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
                                 name='fullName'
                                 label='Full Name'
                                 size='small'
-                                validate={required}
+                                validate={Validators.required}
                             />
                             <Typography sx={{mt: 2, mb: 2}}>About me</Typography>
                             <Stack>
@@ -51,7 +51,7 @@ const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
                                     label='About me'
                                     size='medium'
                                     sx={{width: '500px'}}
-                                    validate={required}
+                                    validate={Validators.required}
                                 />
                                 <CheckBoxControlled
                                     name='lookingForAJob'
@@ -65,7 +65,7 @@ const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
                                     label='Looking job description'
                                     size='medium'
                                     sx={{mb: 2}}
-                                    validate={required}
+                                    validate={Validators.required}
                                 />
                             </Stack>
                             <Typography sx={{mb: 2}}>Contacts</Typography>

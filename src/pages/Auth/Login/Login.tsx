@@ -3,7 +3,13 @@ import {Navigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {signIn} from "../../../store/auth/auth.thunks";
 import LoginForm from "../../../components/auth/authForm/LoginForm";
-import {currentUserIdSelector, isAuthSelector, isFetchingSignUp} from "../../../store/auth/auth.selectors";
+import {
+    captchaUrlSelector,
+    currentUserIdSelector,
+    errorSelector,
+    isAuthSelector,
+    isFetchingSignUp
+} from "../../../store/auth/auth.selectors";
 import Preloader from "../../../components/Common/Preloader/Preloader";
 
 export type ILoginData = {
@@ -17,6 +23,8 @@ const Login = () => {
     const userId = useAppSelector(currentUserIdSelector);
     const isFetching = useAppSelector(isFetchingSignUp);
     const isAuth = useAppSelector(isAuthSelector);
+    const error = useAppSelector(errorSelector);
+    const captchaUrl = useAppSelector(captchaUrlSelector);
 
     const handleSubmit = useCallback(
         async (data: ILoginData) => {
@@ -40,6 +48,8 @@ const Login = () => {
             lostPass='Lost Your password ?'
             nameBtn='Login'
             rememberMe
+            error={error}
+            captchaUrl={captchaUrl}
         />
     );
 };

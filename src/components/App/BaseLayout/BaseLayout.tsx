@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 
 import Box from '@mui/material/Box';
-import {Container, CssBaseline} from "@mui/material";
+import {Container, CssBaseline, Theme, useMediaQuery} from "@mui/material";
 
 import Header from "../../SideBar/Header/Header";
 import SideBar from "../../SideBar/SideBar";
@@ -11,17 +11,24 @@ import {useAppDispatch, useAppSelector} from "../../../hooks/redux";
 import {getCurrentUserProfile, signUp} from "../../../store/auth/auth.thunks";
 import {
     currentUserIdSelector,
-    currentUserProfileSelector,
+    currentUserProfileSelector, currentUserSelector,
 } from "../../../store/auth/auth.selectors";
 import Modal from "../../Common/Modal/Modal";
 
 const BaseLayout = () => {
     const userId = useAppSelector(currentUserIdSelector);
     const currentUserProfile = useAppSelector(currentUserProfileSelector);
+    const userMe = useAppSelector(currentUserSelector);
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+
+    console.log(isMobile)
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
     const [open, setOpen] = useState(false);
     const [isModalOpen, setOpenModal] = useState(false);
+
     const openModal = () => setOpenModal(true);
     const closeModal = () => setOpenModal(false);
 
@@ -51,7 +58,7 @@ const BaseLayout = () => {
             <Box sx={{display: 'flex'}}>
                 <CssBaseline/>
                 <Header openModal={openModal} currentUserProfile={currentUserProfile} open={open} setOpen={handleOpen}/>
-                <SideBar userId={userId} setClose={handleClose} open={open}/>
+                <SideBar isMobile={isMobile} userMe={userMe} profile={currentUserProfile} userId={userId} setClose={handleClose} open={open}/>
                 {renderModal()}
                 <Box sx={sx.content}>
                     <Container sx={sx.container}>
