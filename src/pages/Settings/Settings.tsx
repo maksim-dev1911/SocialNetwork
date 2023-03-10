@@ -6,9 +6,12 @@ import Box from "@mui/material/Box";
 import BasicSettings from "../../components/Settings/BasicSettings";
 import {saveSettings} from "../../store/settings/settings.thunks";
 import {SettingsFormValues} from "../../components/Settings/SettingsForm";
+import {Theme, useMediaQuery} from "@mui/material";
 
 const Settings = () => {
     const currentUserProfile = useAppSelector(currentUserProfileSelector);
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
+
     const dispatch = useAppDispatch();
 
     const selectProfileAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +29,7 @@ const Settings = () => {
 
     return (
         <Box>
-            <BasicSettings handleSubmit={handleSubmit} currentUserProfile={currentUserProfile} selectAvatar={selectProfileAvatar}/>
+            <BasicSettings isMobile={isMobile} handleSubmit={handleSubmit} currentUserProfile={currentUserProfile} selectAvatar={selectProfileAvatar}/>
         </Box>
     );
 };

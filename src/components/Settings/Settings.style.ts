@@ -29,6 +29,9 @@ const sx: StylesRecord = {
         right: 0,
         top: 0,
         bottom: 0,
+    }),
+    fieldStyle: () => ({
+        width: '500px'
     })
 }
 

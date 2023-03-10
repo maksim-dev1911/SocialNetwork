@@ -9,6 +9,7 @@ import Messages from "../../../pages/Messages/Messages.container";
 import People from "../../../pages/Users/People.container";
 import {useAppSelector} from "../../../hooks/redux";
 import {currentUserIdSelector} from "../../../store/auth/auth.selectors";
+import NotFoundPage from "../ErrorPage/NotFoundPage/NotFoundPage";
 
 
 const Router = () => {
@@ -16,6 +17,7 @@ const Router = () => {
     return (
         <>
             <Routes>
+                <Route path="*" element={<NotFoundPage/>} />
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/resetPass' element={<ResetPassword/>}/>
                 <Route path='/' element={<BaseLayout/>}>

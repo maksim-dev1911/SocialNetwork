@@ -34,6 +34,7 @@ export const signIn = createAsyncThunk(
         const response = await api.post('auth/login', data)
         if (response.data.resultCode === 0) {
             dispatch(getAuthUserData())
+            dispatch(getCaptchaUrl(''))
         }
         if (response.data.resultCode === 10) {
             dispatch(captchaUrl())

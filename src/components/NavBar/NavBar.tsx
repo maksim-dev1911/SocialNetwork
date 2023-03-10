@@ -36,7 +36,7 @@ const NavBar: React.FC<PropsType> = ({userId}) => {
 
     return (
         <div>
-            <List>
+            <List sx={{p: 0}}>
                 {linkItem.map((link) => (
                     <ListItem key={link.title} disablePadding sx={{display: 'block'}}>
                         <Link sx={{textDecoration: 'none'}} key={link.title} to={link.path}>

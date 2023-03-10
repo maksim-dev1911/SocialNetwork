@@ -14,9 +14,10 @@ type PropsType = {
     selectAvatar: (e: React.ChangeEvent<HTMLInputElement>) => void
     currentUserProfile: ProfileType | null
     handleSubmit: (data: SettingsFormValues) => void
+    isMobile: boolean
 }
 
-const BasicSettings: React.FC<PropsType> = ({currentUserProfile, selectAvatar, handleSubmit}) => {
+const BasicSettings: React.FC<PropsType> = ({currentUserProfile, selectAvatar, handleSubmit, isMobile}) => {
     const initialValues = useMemo<SettingsFormValues | null>(() => {
         if (!currentUserProfile) {
             return null
@@ -67,7 +68,7 @@ const BasicSettings: React.FC<PropsType> = ({currentUserProfile, selectAvatar, h
                         </Box>
                     </IconButton>
                     <Box mt={3}>
-                        <SettingsForm initialValues={initialValues} handleSubmit={handleSubmit}/>
+                        <SettingsForm isMobile={isMobile} initialValues={initialValues} handleSubmit={handleSubmit}/>
                     </Box>
                 </Grid>
             </Grid>

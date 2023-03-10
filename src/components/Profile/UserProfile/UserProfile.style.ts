@@ -13,6 +13,21 @@ const sx: StylesRecord = {
         backgroundColor: 'white',
         borderRadius: '12px'
     }),
+    mobileContainer: () => ({
+        display: 'block',
+    }),
+    desktopContainer: () => ({
+        display: 'flex',
+        justifyContent: 'center'
+    }),
+    mobileIcon: () => ({
+        display: 'block',
+        p: '5px',
+        textAlign: 'center',
+    }),
+    desktopIcon: () => ({
+        justifyContent: 'center',
+    }),
 }
 
 export const Banner = styled('div')(

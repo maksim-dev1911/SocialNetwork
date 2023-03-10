@@ -21,8 +21,6 @@ const BaseLayout = () => {
     const userMe = useAppSelector(currentUserSelector);
     const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
-    console.log(isMobile)
-
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 

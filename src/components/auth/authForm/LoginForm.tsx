@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import authBackground from "../../../images/auth-background.jpg";
 import {Stack} from "@mui/material";
 import {Form} from 'react-final-form'
@@ -31,6 +31,7 @@ const LoginForm: React.FC<PropsType> = ({
                                             error,
                                             captchaUrl
                                         }) => {
+
     return (
         <Stack>
             <BackgroundImage>

@@ -47,14 +47,13 @@ const sx: StylesRecord = {
     }),
     buttonActive: () => ({
         backgroundColor: 'rgba(98, 82, 206, 0.08)',
-        borderRight: '2px solid rgb(98, 82, 255)'
+        borderRight: '2px solid rgb(98, 82, 255)',
     }),
     generalDivider: () => ({
-        maxHeight: '10px',
         fontSize: '13px',
         color: '#8C8C8C',
-        mb: 1,
-        mt: 1
+        mt: 1,
+        mb: 1
     }),
     wrapperUserInfo: () => ({
         position: "fixed",

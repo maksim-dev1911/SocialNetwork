@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckBoxControlled from '../Fields/CheckBoxControlled/CheckBoxControlled';
 import Validators from '../../services/validators';
+import sx from './Settings.style';
 
 export type SettingsFormValues = {
     fullName: string
@@ -25,9 +26,10 @@ export type SettingsFormValues = {
 type PropsType = {
     handleSubmit: (data: SettingsFormValues) => void
     initialValues: SettingsFormValues | null
+    isMobile: boolean
 }
 
-const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
+const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues, isMobile}) => {
     return (
         <div>
             <Form
@@ -50,7 +52,7 @@ const SettingsForm: React.FC<PropsType> = ({handleSubmit, initialValues}) => {
                                     name='aboutMe'
                                     label='About me'
                                     size='medium'
-                                    sx={{width: '500px'}}
+                                    sx={!isMobile ? sx.fieldStyle : null}
                                     validate={Validators.required}
                                 />
                                 <CheckBoxControlled

@@ -20,9 +20,10 @@ import List from "@mui/material/List";
 
 type PropsType = {
     profile: ProfileType | null
+    isMobile: boolean
 }
 
-const UserProfile: React.FC<PropsType> = ({profile}) => {
+const UserProfile: React.FC<PropsType> = ({profile, isMobile}) => {
     const linkItem = [
         {
             icon: InstagramIcon,
@@ -54,7 +55,7 @@ const UserProfile: React.FC<PropsType> = ({profile}) => {
         },
     ]
 
-    const filtered = linkItem.filter(link => link.path !== 'null')
+    const filtered = linkItem.filter(link => link.path !== 'null' || '')
 
     return (
         <Box sx={sx.wrapper}>
@@ -66,13 +67,13 @@ const UserProfile: React.FC<PropsType> = ({profile}) => {
                     </Avatar>
                 </Banner>
                 <Box sx={{position: 'absolute', right: 0, bottom: 0}}>
-                    <List sx={{display: 'flex'}}>
+                    <List sx={isMobile ? sx.mobileContainer : sx.desktopContainer}>
                         {filtered.map((link) => {
                             return (
                             <ListItem disablePadding>
                                 <Link href={link.path} sx={{textDecoration: 'none'}}>
                                         <ListItemButton sx={{p: 0}}>
-                                            <ListItemIcon sx={{display: 'flex', justifyContent: 'center' }}>
+                                            <ListItemIcon sx={isMobile ? sx.mobileIcon : sx.desktopIcon}>
                                                 <link.icon fontSize="medium" sx={{color: "#fff"}}/>
                                             </ListItemIcon>
                                         </ListItemButton>

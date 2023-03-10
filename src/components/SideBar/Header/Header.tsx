@@ -43,7 +43,7 @@ const Header: React.FC<PropsType> = ({setOpen, open, currentUserProfile, openMod
     return (
         <AppBar elevation={0} sx={{borderBottom: '1px solid rgba(0, 0, 0, 0.12)', bgcolor: 'transparent'}}
                 position="fixed" open={open}>
-            <Toolbar sx={{backgroundColor: 'white', display: 'flex', justifyContent: 'space-between'}}>
+            <Toolbar sx={{backgroundColor: 'white', display: 'flex', justifyContent: 'space-between', }}>
                 <IconButton
                     color="default"
                     onClick={setOpen}

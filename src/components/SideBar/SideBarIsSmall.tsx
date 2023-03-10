@@ -14,8 +14,7 @@ type PropsType = {
 const SideBarIsSmall: React.FC<PropsType> = ({profile, userId}) => {
     return (
         <Box mt={8} >
-            <Divider/>
-            <Typography sx={{fontSize: '11px', textAlign: 'center', mt: 1, color: '#8C8C8C'}}>GENERAL</Typography>
+            <Typography sx={{fontSize: '11px', textAlign: 'center', mt: 1, mb: 1, color: '#8C8C8C'}}>GENERAL</Typography>
             <Box>
                 <NavBar userId={userId} variant='small'/>
             </Box>

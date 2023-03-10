@@ -6,10 +6,12 @@ import {userProfileSelector} from "../../store/profile/profile.selectors";
 import {getUserProfile, savePhoto} from "../../store/profile/profile.thunks";
 import {useParams} from "react-router-dom";
 import Preloader from "../../components/Common/Preloader/Preloader";
+import {Theme, useMediaQuery} from "@mui/material";
 
 const Profile = () => {
     const profile = useAppSelector(userProfileSelector)
     const dispatch = useAppDispatch();
+    const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
 
     let {userId} = useParams()
     if (!userId) {
@@ -26,7 +28,7 @@ const Profile = () => {
 
     return (
         <Box>
-            <UserProfile profile={profile}/>
+            <UserProfile isMobile={isMobile} profile={profile}/>
         </Box>
     );
 };

@@ -32,7 +32,7 @@ const SideBarIsExpanded: React.FC<PropsType> = ({setClose, userId, profile, isMo
             </Box>
             <Divider/>
             <Divider sx={sx.generalDivider} textAlign='left'>GENERAL</Divider>
-            <Box padding={1}>
+            <Box mr='1px'>
                 <NavBar userId={userId} variant='default'/>
             </Box>
             <Box sx={sx.wrapperUserInfo}>
