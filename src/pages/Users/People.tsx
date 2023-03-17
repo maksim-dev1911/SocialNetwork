@@ -20,7 +20,6 @@ const People = () => {
 
     useEffect(() => {
         onPageChanged(currentPage)
-        dispatch(followed(27869))
     }, [currentPage])
 
     const handleFollow = (id: number) => {
@@ -40,7 +39,7 @@ const People = () => {
     }
 
     if (isFetching) {
-        return <Preloader/>
+        return <Preloader sx={{alignItems: 'center', position:'absolute', top:'50%', left:0, right: 0}}/>
     }
 
     return (

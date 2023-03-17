@@ -44,6 +44,7 @@ export const unfollow = createAsyncThunk(
 export const followed = createAsyncThunk(
     'follow',
     async (userId: number | undefined, {dispatch}) => {
+        console.log(userId)
         const response = await api.get(`follow/${userId}`)
         dispatch(getFollowedUsers(response.data.data))
     }

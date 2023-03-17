@@ -70,23 +70,21 @@ const UserProfile: React.FC<PropsType> = ({profile, isMobile}) => {
                     <List sx={isMobile ? sx.mobileContainer : sx.desktopContainer}>
                         {filtered.map((link) => {
                             return (
-                            <ListItem disablePadding>
-                                <Link href={link.path} sx={{textDecoration: 'none'}}>
+                                <ListItem disablePadding>
+                                    <Link href={link.path} sx={{textDecoration: 'none'}}>
                                         <ListItemButton sx={{p: 0}}>
                                             <ListItemIcon sx={isMobile ? sx.mobileIcon : sx.desktopIcon}>
                                                 <link.icon fontSize="medium" sx={{color: "#fff"}}/>
                                             </ListItemIcon>
                                         </ListItemButton>
-                                </Link>
-                            </ListItem>
-                        )})}
+                                    </Link>
+                                </ListItem>
+                            )
+                        })}
                     </List>
                 </Box>
             </Box>
             <Typography sx={sx.userName}>{profile?.fullName}</Typography>
-            <div>
-                <TabsMy/>
-            </div>
         </Box>
     );
 };

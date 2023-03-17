@@ -11,7 +11,8 @@ const sx: StylesRecord = {
     }),
     wrapper: () => ({
         backgroundColor: 'white',
-        borderRadius: '12px'
+        borderRadius: '12px 12px 0px 0px',
+        pb: 3
     }),
     mobileContainer: () => ({
         display: 'block',

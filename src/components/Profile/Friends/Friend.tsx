@@ -1,19 +1,22 @@
 import React from 'react';
 import Box from "@mui/material/Box";
-import {Avatar, sx} from "./User.style";
 import userAvatar from "../../../images/userAvatar.png";
 import Typography from "@mui/material/Typography";
-import {Button, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import {UserType} from "../../../types/types";
 import {Link} from "react-router-dom";
+import {Avatar, sx} from '../../Users/User/User.style';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Preloader from "../../Common/Preloader/Preloader";
 
 type PropsType = {
     user: UserType
-    follow: (id: number) => void
     unfollow: (id: number) => void
+    followingInProgress: Array<number>
 }
 
-const User: React.FC<PropsType> = ({user, follow, unfollow}) => {
+const Friend: React.FC<PropsType> = ({user, unfollow, followingInProgress}) => {
+    console.log(followingInProgress)
     return (
         <Grid item md={3} lg={2.5} sm={5} xs={9}>
             <Box sx={sx.wrapper}>
@@ -23,13 +26,13 @@ const User: React.FC<PropsType> = ({user, follow, unfollow}) => {
                     </Link>
                 </Avatar>
                 <Typography sx={sx.userName}>{user.name}</Typography>
-                {user.followed
-                    ? <Button fullWidth variant='contained' onClick={() => {unfollow(user.id)}}>Unfollow</Button>
-                    : <Button fullWidth variant='contained' onClick={() => {follow(user.id)}}>Follow</Button>
-                }
+                <LoadingButton loading={followingInProgress.some(id => id === user.id)} fullWidth variant='contained'
+                               onClick={() => {
+                                   unfollow(user.id)
+                               }}>Unfollow</LoadingButton>
             </Box>
         </Grid>
     );
 };
 
-export default React.memo(User);
+export default React.memo(Friend);

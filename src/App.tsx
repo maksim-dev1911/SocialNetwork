@@ -18,7 +18,7 @@ const App = () => {
     }, [])
 
     if (!initialized) {
-        return <Preloader/>
+        return <Preloader sx={{alignItems: 'center', position:'absolute', top:'50%', left:0, right: 0}}/>
     }
 
     return (

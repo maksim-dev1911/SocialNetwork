@@ -1,9 +1,13 @@
 import React from 'react';
-import {CircularProgress, Stack} from "@mui/material";
+import {CircularProgress, Stack, SxProps, Theme} from "@mui/material";
 
-const Preloader = () => {
+type PropsType = {
+    sx: SxProps<Theme> | undefined
+}
+
+const Preloader: React.FC<PropsType> = ({sx}) => {
     return (
-        <Stack alignItems='center' position='absolute' top='50%' left={0} right={0}>
+        <Stack sx={sx}>
             <CircularProgress sx={{color: '#6252CE'}} size={50}/>
         </Stack>
     );

@@ -1,67 +1,56 @@
 import React from 'react';
-import Box from "@mui/material/Box";
-import {Tab, Tabs} from "@mui/material";
-import Typography from "@mui/material/Typography";
 
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
+import MuiTabs, { TabsProps } from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { NavLink } from 'react-router-dom';
+
+export interface ITab {
+    label: string;
+    value: string | number;
+    isLink?: boolean;
 }
 
-function TabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
+type PropsType = Omit<TabsProps, 'onChange'> & {
+    tabs?: ITab[];
+    value?: string | number;
+    onChange?: (value: string | number) => void;
+};
+
+const Tabs: React.FC<PropsType> = ({ value = '', onChange, tabs = [], ...props }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
+    const handleChange = (_: any, value: string) => {
+        if (onChange) {
+            onChange(value);
+        }
+    };
+
+    const getTabProps = (tab: ITab) => {
+        const props: Record<string, any> = {
+            label: tab.label,
+            value: tab.value,
+        };
+
+        if (tab.isLink) {
+            props.component = NavLink;
+            props.to = tab.value;
+        }
+
+        return props;
+    };
 
     return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
+        <MuiTabs
+            value={value.toString()}
+            onChange={handleChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            {...props}
         >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-function a11yProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-
-type PropsType = {
-    handleChange?: () => void
-}
-
-const TabsMy: React.FC<PropsType> = () => {
-    const [value, setValue] = React.useState(0);
-
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
-    };
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Timeline" {...a11yProps(0)} />
-                    <Tab label="Friends" {...a11yProps(1)} />
-                </Tabs>
-            </Box>
-            <TabPanel value={value} index={0}>
-                Timeline
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-                Friends
-            </TabPanel>
-        </Box>
+            {tabs.map((tab) => (
+                <Tab key={tab.value} {...getTabProps(tab)} />
+            ))}
+        </MuiTabs>
     );
 };
 
-export default TabsMy;
+export default React.memo(Tabs);
