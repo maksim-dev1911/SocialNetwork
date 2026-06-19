@@ -19,7 +19,7 @@ const style = {
 type PropsType = {
     openModal: boolean
     closeModal: () => void
-    fnToAccept: () => void
+    fnToAccept?: () => void
 }
 
 const Modal: React.FC<PropsType> = ({openModal, closeModal, fnToAccept}) => {

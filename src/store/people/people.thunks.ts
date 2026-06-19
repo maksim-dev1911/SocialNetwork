@@ -1,51 +1,46 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {api} from "../../api";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { api } from '../../api';
 import {
-    getFollowedUsers,
-    setCurrentPage,
-    setIsFetching,
-    setTotalUsersCount,
-    setUsers,
-    updateUsers
-} from "./peopleSlice";
+  isLoadingFollowed,
+  setCurrentPage,
+  setIsFetching,
+  setTotalUsersCount,
+  setUsers,
+  updateUsers,
+} from './peopleSlice';
 
 export const getUsers = createAsyncThunk(
-    'users',
-    async ({pageSize, currentPage}: any, {dispatch}) => {
-        dispatch(setIsFetching(true))
-        dispatch(setCurrentPage(currentPage))
-        const response = await api.get(`users?page=${currentPage}&count=${pageSize}`)
-        dispatch(setIsFetching(false))
-        dispatch(setUsers(response.data.items))
-        dispatch(setTotalUsersCount(response.data.totalCount))
-    }
-)
+  'users',
+  async ({ pageSize, currentPage }: any, { dispatch }) => {
+    dispatch(setIsFetching(true));
+    dispatch(setCurrentPage(currentPage));
+    const response = await api.get(`users?page=${currentPage}&count=${pageSize}`);
+    dispatch(setIsFetching(false));
+    dispatch(setUsers(response.data.items));
+    dispatch(setTotalUsersCount(response.data.totalCount));
+  }
+);
 
 export const follow = createAsyncThunk(
-    'follow',
-    async (userId: number | undefined, {dispatch}) => {
-        if (userId) {
-            await api.post(`follow/${userId}`)
-            dispatch(updateUsers({id: userId, user: {followed: true}}))
-        }
+  'follow',
+  async (userId: number | undefined, { dispatch }) => {
+    if (userId) {
+      dispatch(isLoadingFollowed({ userId, isFetching: true }));
+      await api.post(`follow/${userId}`);
+      dispatch(updateUsers({ id: userId, user: { followed: true } }));
+      dispatch(isLoadingFollowed({ userId, isFetching: false }));
     }
-)
+  }
+);
 
 export const unfollow = createAsyncThunk(
-    'follow',
-    async (userId: number | undefined, {dispatch}) => {
-        if (userId) {
-            await api.delete(`follow/${userId}`)
-            dispatch(updateUsers({id: userId, user: {followed: false}}))
-        }
+  'follow',
+  async (userId: number | undefined, { dispatch }) => {
+    if (userId) {
+      dispatch(isLoadingFollowed({ userId, isFetching: true }));
+      await api.delete(`follow/${userId}`);
+      dispatch(updateUsers({ id: userId, user: { followed: false } }));
+      dispatch(isLoadingFollowed({ userId, isFetching: false }));
     }
-)
-
-export const followed = createAsyncThunk(
-    'follow',
-    async (userId: number | undefined, {dispatch}) => {
-        console.log(userId)
-        const response = await api.get(`follow/${userId}`)
-        dispatch(getFollowedUsers(response.data.data))
-    }
-)
+  }
+);

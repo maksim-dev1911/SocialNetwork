@@ -1,5 +1,4 @@
 import React from 'react';
-import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import {ProfileType} from "../../types/types";
 import NavBar from "../NavBar/NavBar";
@@ -19,7 +18,7 @@ const SideBarIsSmall: React.FC<PropsType> = ({profile, userId}) => {
                 <NavBar userId={userId} variant='small'/>
             </Box>
             <Box sx={{position: "absolute", bottom: 0, left:"50%", transform:"translate(-50%, -45%)", p: '3px'}}>
-                <Avatar src={profile?.photos?.large}>{profile?.fullName}</Avatar>
+                <Avatar src={profile?.photos?.large}/>
             </Box>
         </Box>
     );

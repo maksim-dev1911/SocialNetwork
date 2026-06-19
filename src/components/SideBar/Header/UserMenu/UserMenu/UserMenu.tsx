@@ -94,7 +94,7 @@ const AccountMenu: React.FC<PropsType> = ({currentUserProfile, openModal}) => {
                             sx={{width: 40, height: 40}}/> {currentUserProfile?.fullName}
                 </MenuItem>
                 <Divider sx={{borderStyle: "dashed"}}/>
-                <Link to='settings'>
+                <Link to='/settings'>
                     <MenuItem onClick={handleClose}>
                         <ListItemIcon>
                             <Settings fontSize="small"/>

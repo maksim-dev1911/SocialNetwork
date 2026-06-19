@@ -3,16 +3,18 @@ import {StylesRecord} from "../../../interfaces/Styles";
 
 const sx: StylesRecord = {
     userName: () => ({
-        color: "#464646",
+        color: "black",
         textAlign: "center",
         fontSize: "30px",
-        mt: 3,
         fontWeight: "bold",
     }),
     wrapper: () => ({
-        backgroundColor: 'white',
-        borderRadius: '12px 12px 0px 0px',
-        pb: 3
+        bgcolor: '#fff',
+        borderRadius: '24px 24px 0px 0px',
+        border: '1px solid',
+        borderColor: 'rgba(226, 232, 240, 0.6)',
+        boxShadow: '0px 12px 32px rgba(15, 23, 42, 0.06)',
+        pb: 3,
     }),
     mobileContainer: () => ({
         display: 'block',
@@ -38,16 +40,16 @@ export const Banner = styled('div')(
     justify-content: center;
   img {
     width: 100%;
-    height: 285px;
+    height: 385px;
     object-fit: cover;
-    border-radius: 12px 12px 0 0;
+    border-radius: 15px 15px 0 0;
   }
 `
 );
 
 export const Avatar = styled('div')(
     () => `
-    bottom: -20px;
+    bottom: -65px;
     position: absolute;
   img {
     width: 140px;
