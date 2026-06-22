@@ -6,17 +6,19 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Divider from '@mui/material/Divider';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Dispatch, SetStateAction } from 'react';
 
 type PropsType = {
-  postId: number;
+  id: number;
   deletePost: (postId: number) => void;
+  label: string;
+  setEditMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
 };
 
-const DropDown: React.FC<PropsType> = ({ deletePost, postId }) => {
+const DropDown: React.FC<PropsType> = ({ deletePost, id, label, setEditMode }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,7 +31,7 @@ const DropDown: React.FC<PropsType> = ({ deletePost, postId }) => {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <IconButton onClick={handleClick} size='small'>
+        <IconButton onClick={handleClick} size="small">
           <MoreHorizIcon sx={{ '&:hover': { color: '#0056b3' } }} />
         </IconButton>
       </Box>
@@ -65,23 +67,28 @@ const DropDown: React.FC<PropsType> = ({ deletePost, postId }) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <Link to='editPost'>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <EditIcon fontSize='small' />
-            </ListItemIcon>
-            <Typography sx={{ color: '#666666DE' }}>Edit Post</Typography>
-          </MenuItem>
-        </Link>
-        <Divider sx={{ m: '5px 0 5px 0', borderStyle: 'dashed' }} />
-        <MenuItem onClick={() => {
-          handleClose();
-          deletePost(postId);
-        }}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setEditMode({ editMode: true, id: id });
+          }}
+        >
           <ListItemIcon>
-            <DeleteIcon color='error' fontSize='small' />
+            <EditIcon fontSize="small" />
           </ListItemIcon>
-          <Typography color='error'>Delete</Typography>
+          <Typography sx={{ color: '#666666DE' }}>{label}</Typography>
+        </MenuItem>
+        <Divider sx={{ m: '5px 0 5px 0', borderStyle: 'dashed' }} />
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            deletePost(id);
+          }}
+        >
+          <ListItemIcon>
+            <DeleteIcon color="error" fontSize="small" />
+          </ListItemIcon>
+          <Typography color="error">Delete</Typography>
         </MenuItem>
       </Menu>
     </React.Fragment>

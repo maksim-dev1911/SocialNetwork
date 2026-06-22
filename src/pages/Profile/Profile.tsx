@@ -16,10 +16,15 @@ import {
 import {
   createComment,
   createPost,
+  deleteComment,
   deletePost,
+  updateComment,
+  getComments,
+  getPostsThunk,
   getUserFriends,
   getUserProfile,
   unfollow,
+  updatePost,
 } from '../../store/profile/profile.thunks';
 import { useParams } from 'react-router-dom';
 import Preloader from '../../components/Common/Preloader/Preloader';
@@ -33,6 +38,7 @@ import About from '../../components/Profile/TimeLine/About/About';
 import FriendsCard from '../../components/Profile/TimeLine/FriendsCard/FriendsCard';
 import { toggleLike } from '../../store/profile/profileSlice';
 import { currentUserSelector } from '../../store/auth/auth.selectors';
+import EditPostModal from '../../components/Profile/TimeLine/Posts/EditPostModal';
 
 type TabsType = 'timeline' | 'friends';
 
@@ -60,6 +66,10 @@ const Profile = () => {
   const currentUser = useAppSelector(currentUserSelector);
 
   const [tab, setTab] = useState<TabsType>('timeline');
+  const [editCommentMode, setEditCommentMode] = useState<{ editMode: boolean; id?: number }>({
+    editMode: false,
+    id: 0,
+  });
 
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
@@ -71,6 +81,8 @@ const Profile = () => {
   }
 
   useEffect(() => {
+    dispatch(getPostsThunk());
+    dispatch(getComments());
     dispatch(getUserProfile(userId));
     onPageChanged(currentPage);
   }, [userId, dispatch, currentPage]);
@@ -85,6 +97,10 @@ const Profile = () => {
 
   const handleDeletePost = (postId: number) => {
     dispatch(deletePost(postId));
+  };
+
+  const handleDeleteComment = (postId: number, commentId: number) => {
+    dispatch(deleteComment({ postId, commentId }));
   };
 
   const handlePageChanged = (_: any, page: number) => {
@@ -112,6 +128,18 @@ const Profile = () => {
     },
     []
   );
+
+  const saveUpdatePost = useCallback(
+    async (postId: number, text: string, photo: File | null, removePhoto: boolean) => {
+      dispatch(updatePost({ text, photo, postId, removePhoto }));
+    },
+    []
+  );
+
+  const saveEditComment = (text: string, postId: number, commentId: number) => {
+    dispatch(updateComment({ text, commentId, postId }));
+    setEditCommentMode({ editMode: false, id: commentId });
+  };
 
   const onClickToTabFriends = () => {
     setTab('friends');
@@ -162,7 +190,12 @@ const Profile = () => {
               profile={profile}
               isSm={isSm}
               comments={comments}
+              saveEditComment={saveEditComment}
+              editCommentMode={editCommentMode}
+              setEditCommentMode={setEditCommentMode}
+              deleteComment={handleDeleteComment}
               deletePost={handleDeletePost}
+              saveUpdatePost={saveUpdatePost}
             />
           )}
           {tab === 'friends' && (

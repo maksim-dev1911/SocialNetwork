@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { SxProps, TextField, Theme } from '@mui/material';
 import { Field } from 'react-final-form';
 import { FieldValidator } from 'final-form';
@@ -14,8 +14,11 @@ type PropsType = {
   minRows?: number;
   maxRows?: number;
   placeholder?: string;
+  fullWidth?: boolean;
   hidden?: boolean;
   accept?: string;
+  defaultValue?: string;
+  rows?: number;
 };
 
 const TextFieldControlled: React.FC<PropsType> = ({
@@ -30,6 +33,9 @@ const TextFieldControlled: React.FC<PropsType> = ({
   type,
   placeholder,
   hidden,
+  rows,
+  defaultValue,
+  fullWidth,
 }) => {
   return (
     <Field name={name} type={type} validate={validate}>
@@ -49,6 +55,9 @@ const TextFieldControlled: React.FC<PropsType> = ({
             maxRows={maxRows}
             placeholder={placeholder}
             hidden={hidden}
+            defaultValue={defaultValue}
+            rows={rows}
+            fullWidth={fullWidth}
           />
         );
       }}

@@ -12,7 +12,7 @@ import { FormApi } from 'final-form';
 import { PostFormDataType } from '../Posts/Posts';
 
 type PropsType = {
-  selectedPhoto: File | null;
+  selectedPhoto?: File | null;
   setSelectedPhoto: React.Dispatch<React.SetStateAction<File | null>>;
   photoInputRef: React.RefObject<HTMLInputElement>;
   formRef: React.MutableRefObject<FormApi<PostFormDataType> | null>;
