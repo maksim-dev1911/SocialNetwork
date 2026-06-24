@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { usersMessagesSelector } from '../../store/chat/chat.selectors';
 import { connectToWs } from '../../api';
 import { sx } from '../../components/Chat/Messages.style';
+import { FormValues } from '../../components/Chat/SendMessageForm';
 
 const Chat = () => {
   const usersMessages = useAppSelector(usersMessagesSelector);
@@ -28,22 +29,41 @@ const Chat = () => {
     wsRef.current = connectToWs();
 
     wsRef.current.addEventListener('message', (e: MessageEvent) => {
-
       dispatch(userMessage(JSON.parse(e.data)));
     });
   }, []);
 
-  const handleSubmit = (sendMessage: string) => {
-    wsRef.current.send(Object.values(sendMessage).toString());
+  const handleSubmit = (values: FormValues) => {
+    wsRef.current.send(Object.values(values).toString());
   };
 
   return (
-    <Box sx={sx.messagesWrapper}>
-      <Typography mb={5} variant='h5'>
-        Common Chat
+    <Box>
+      <Typography
+        variant="h4"
+        fontWeight={800}
+        sx={{
+          letterSpacing: '-0.04em',
+          color: 'text.primary',
+        }}
+      >
+        Common chat
       </Typography>
-      <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
-      <SendMessageForm onSubmit={handleSubmit} />
+
+      <Typography
+        variant="body1"
+        sx={{
+          mt: 0.5,
+          color: 'text.secondary',
+          fontWeight: 500,
+        }}
+      >
+        Connect with community members
+      </Typography>
+      <Box sx={sx.messagesWrapper}>
+        <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
+        <SendMessageForm onSubmit={handleSubmit} />
+      </Box>
     </Box>
   );
 };
