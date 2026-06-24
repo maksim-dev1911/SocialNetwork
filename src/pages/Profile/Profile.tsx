@@ -18,13 +18,13 @@ import {
   createPost,
   deleteComment,
   deletePost,
-  updateComment,
   getComments,
   getPostsThunk,
   getUserFriends,
   getUserProfile,
   unfollow,
-  updatePost,
+  updateCommentThunk,
+  updatePostThunk,
 } from '../../store/profile/profile.thunks';
 import { useParams } from 'react-router-dom';
 import Preloader from '../../components/Common/Preloader/Preloader';
@@ -33,12 +33,11 @@ import Tabs from '../../components/Common/Tabs/Tabs';
 import Friends from '../../components/Profile/Friends/Friends';
 import TimeLine from '../../components/Profile/TimeLine/TimeLine';
 import { PostFormDataType } from '../../components/Profile/TimeLine/Posts/Posts';
-import { PostCommentFormData } from '../../types/types';
+import { EditModeType, PostCommentFormData } from '../../types/types';
 import About from '../../components/Profile/TimeLine/About/About';
 import FriendsCard from '../../components/Profile/TimeLine/FriendsCard/FriendsCard';
 import { toggleLike } from '../../store/profile/profileSlice';
 import { currentUserSelector } from '../../store/auth/auth.selectors';
-import EditPostModal from '../../components/Profile/TimeLine/Posts/EditPostModal';
 
 type TabsType = 'timeline' | 'friends';
 
@@ -66,7 +65,7 @@ const Profile = () => {
   const currentUser = useAppSelector(currentUserSelector);
 
   const [tab, setTab] = useState<TabsType>('timeline');
-  const [editCommentMode, setEditCommentMode] = useState<{ editMode: boolean; id?: number }>({
+  const [editCommentMode, setEditCommentMode] = useState<EditModeType>({
     editMode: false,
     id: 0,
   });
@@ -129,15 +128,15 @@ const Profile = () => {
     []
   );
 
-  const saveUpdatePost = useCallback(
+  const updatePost = useCallback(
     async (postId: number, text: string, photo: File | null, removePhoto: boolean) => {
-      dispatch(updatePost({ text, photo, postId, removePhoto }));
+      dispatch(updatePostThunk({ text, photo, postId, removePhoto }));
     },
     []
   );
 
-  const saveEditComment = (text: string, postId: number, commentId: number) => {
-    dispatch(updateComment({ text, commentId, postId }));
+  const updateComment = (text: string, postId: number, commentId: number) => {
+    dispatch(updateCommentThunk({ text, commentId, postId }));
     setEditCommentMode({ editMode: false, id: commentId });
   };
 
@@ -185,17 +184,17 @@ const Profile = () => {
             <TimeLine
               posts={posts}
               toggleLike={handleToggleLike}
-              handleSubmitCreatePost={handleSubmitCreatePost}
-              handleSubmitCreateComment={handleSubmitCreateComment}
+              onPostCreate={handleSubmitCreatePost}
+              onCommentCreate={handleSubmitCreateComment}
               profile={profile}
               isSm={isSm}
               comments={comments}
-              saveEditComment={saveEditComment}
+              updateComment={updateComment}
               editCommentMode={editCommentMode}
               setEditCommentMode={setEditCommentMode}
               deleteComment={handleDeleteComment}
               deletePost={handleDeletePost}
-              saveUpdatePost={saveUpdatePost}
+              updatePost={updatePost}
             />
           )}
           {tab === 'friends' && (

@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { PostFormDataType, PostType } from './Posts';
-import { CommentType, PostCommentFormData } from '../../../../types/types';
+import { CommentType, EditModeType, PostCommentFormData } from '../../../../types/types';
 import Comments from '../Comments/Comments';
 import { EditPostModal } from './EditPostModal';
 import { FormApi } from 'final-form';
@@ -10,31 +10,31 @@ import sx from '../TimeLine.style';
 
 type PropsType = {
   post: PostType;
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
-  saveEditComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (text: string, postId: number, commentId: number) => void;
   deletePost: (postId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
-  setEditCommentMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
-  editCommentMode: { editMode: boolean; id?: number };
-  saveUpdatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
+  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
 };
 
 const Post: React.FC<PropsType> = ({
   post,
-  handleSubmitCreateComment,
+  onCommentCreate,
   comments,
   toggleLike,
-  saveEditComment,
+  updateComment,
   deletePost,
   deleteComment,
   setEditCommentMode,
   editCommentMode,
-  saveUpdatePost,
+  updatePost,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [editPostMode, setEditPostMode] = useState<{ editMode: boolean; id?: number }>({
+  const [editPostMode, setEditPostMode] = useState<EditModeType>({
     editMode: false,
     id: 0,
   });
@@ -54,7 +54,7 @@ const Post: React.FC<PropsType> = ({
         newText={newText}
         open={editPostMode.editMode}
         onChange={setNewText}
-        saveUpdatePost={saveUpdatePost}
+        updatePost={updatePost}
         post={post}
         newPhoto={newPhoto}
         setNewPhoto={setNewPhoto}
@@ -77,10 +77,10 @@ const Post: React.FC<PropsType> = ({
       />
       <Comments
         postId={post.id}
-        handleSubmitCreateComment={handleSubmitCreateComment}
+        onCommentCreate={onCommentCreate}
         isOpen={isOpen}
         comments={comments}
-        saveEditComment={saveEditComment}
+        updateComment={updateComment}
         deleteComment={deleteComment}
         editCommentMode={editCommentMode}
         setEditCommentMode={setEditCommentMode}

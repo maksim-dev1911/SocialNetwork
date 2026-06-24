@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import { Form } from 'react-final-form';
-import { CommentType, PostCommentFormData } from '../../../../types/types';
+import { CommentType, EditModeType, PostCommentFormData } from '../../../../types/types';
 import TextFieldControlled from '../../../Fields/TextFieldControlled/TextFieldControlled';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Comment from './Comment';
@@ -11,23 +11,23 @@ import Comment from './Comment';
 type PropsType = {
   postId: number;
   isOpen: boolean;
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
   comments: Record<number, CommentType[]>;
-  saveEditComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (text: string, postId: number, commentId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
-  setEditCommentMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
-  editCommentMode: { editMode: boolean; id?: number };
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
 };
 
 const Comments: React.FC<PropsType> = ({
   isOpen,
-  handleSubmitCreateComment,
+  onCommentCreate,
   postId,
   comments,
   deleteComment,
   setEditCommentMode,
   editCommentMode,
-  saveEditComment,
+  updateComment,
 }) => {
   return (
     <Box>
@@ -40,7 +40,7 @@ const Comments: React.FC<PropsType> = ({
                 comment={comment}
                 key={comment.id}
                 postId={postId}
-                saveEditComment={saveEditComment}
+                updateComment={updateComment}
                 deleteComment={deleteComment}
                 editCommentMode={editCommentMode}
                 setEditCommentMode={setEditCommentMode}
@@ -49,7 +49,7 @@ const Comments: React.FC<PropsType> = ({
           {!editCommentMode.editMode && (
             <Box p={1}>
               <Form
-                onSubmit={(data: PostCommentFormData) => handleSubmitCreateComment(postId, data)}
+                onSubmit={(data: PostCommentFormData) => onCommentCreate(postId, data)}
                 render={({ handleSubmit, submitting }) => {
                   return (
                     <form onSubmit={handleSubmit}>

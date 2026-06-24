@@ -75,7 +75,7 @@ const profileSlice = createSlice({
         state.comments[action.payload.postId] = [action.payload.comment];
       }
     },
-    setAllComments: (state, action: PayloadAction<CommentType>) => {
+    setAllComments: (state, action: PayloadAction<Record<number, CommentType[]>>) => {
       state.comments = action.payload;
     },
     toggleLike: (state, action: PayloadAction<number>) => {

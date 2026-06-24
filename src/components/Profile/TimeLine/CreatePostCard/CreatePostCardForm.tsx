@@ -8,7 +8,7 @@ import { Form } from 'react-final-form';
 import { FormApi } from 'final-form';
 
 type PropsType = {
-  handleSubmitCreatePost: (data: PostFormDataType) => void;
+  onPostCreate: (data: PostFormDataType) => void;
   setSelectedPhoto: React.Dispatch<React.SetStateAction<File | null>>;
   photoInputRef: React.RefObject<HTMLInputElement>;
   formRef: React.MutableRefObject<FormApi<PostFormDataType> | null>;
@@ -16,7 +16,7 @@ type PropsType = {
 };
 
 const CreatePostCardForm: React.FC<PropsType> = ({
-  handleSubmitCreatePost,
+  onPostCreate,
   formRef,
   profileName,
   setSelectedPhoto,
@@ -26,7 +26,7 @@ const CreatePostCardForm: React.FC<PropsType> = ({
     <>
       <Form<PostFormDataType>
         onSubmit={(values, form) => {
-          handleSubmitCreatePost(values);
+          onPostCreate(values);
 
           form.reset();
 

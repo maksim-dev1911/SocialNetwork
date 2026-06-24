@@ -13,12 +13,12 @@ import { Dispatch, SetStateAction } from 'react';
 
 type PropsType = {
   id: number;
-  deletePost: (postId: number) => void;
   label: string;
-  setEditMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
+  onDelete: (id: number) => void;
+  onUpdate: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
 };
 
-const DropDown: React.FC<PropsType> = ({ deletePost, id, label, setEditMode }) => {
+const ActionsDropdown: React.FC<PropsType> = ({ onDelete, id, label, onUpdate }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -70,7 +70,7 @@ const DropDown: React.FC<PropsType> = ({ deletePost, id, label, setEditMode }) =
         <MenuItem
           onClick={() => {
             handleClose();
-            setEditMode({ editMode: true, id: id });
+            onUpdate({ editMode: true, id: id });
           }}
         >
           <ListItemIcon>
@@ -82,7 +82,7 @@ const DropDown: React.FC<PropsType> = ({ deletePost, id, label, setEditMode }) =
         <MenuItem
           onClick={() => {
             handleClose();
-            deletePost(id);
+            onDelete(id);
           }}
         >
           <ListItemIcon>
@@ -95,4 +95,4 @@ const DropDown: React.FC<PropsType> = ({ deletePost, id, label, setEditMode }) =
   );
 };
 
-export default React.memo(DropDown);
+export default React.memo(ActionsDropdown);

@@ -75,3 +75,8 @@ export type PostCommentPayload = {
 export type PostCommentFormData = {
   text: string;
 };
+
+export type EditModeType = {
+  editMode: boolean;
+  id?: number;
+};

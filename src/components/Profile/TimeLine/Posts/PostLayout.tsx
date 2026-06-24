@@ -3,18 +3,18 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
-import DropDown from '../../../Common/DropDown/DropDown';
+import DropDown from '../../../Common/DropDown/ActionsDropdown';
 import Divider from '@mui/material/Divider';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import { PostType } from './Posts';
-import { CommentType } from '../../../../types/types';
+import { CommentType, EditModeType } from '../../../../types/types';
 
 type PropsType = {
   post: PostType;
   comments: Record<number, CommentType[]>;
-  setEditPostMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
+  setEditPostMode: Dispatch<SetStateAction<EditModeType>>;
   deletePost: (postId: number) => void;
   toggleIsOpen: () => void;
   toggleLike: (postId: number) => void;
@@ -46,8 +46,8 @@ const PostLayout: React.FC<PropsType> = ({
           <DropDown
             id={post.id}
             label="Edit Post"
-            deletePost={deletePost}
-            setEditMode={setEditPostMode}
+            onDelete={deletePost}
+            onUpdate={setEditPostMode}
           />
         </Box>
       </Box>

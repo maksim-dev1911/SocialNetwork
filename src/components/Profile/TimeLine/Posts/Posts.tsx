@@ -1,23 +1,28 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Box from '@mui/material/Box';
-import { CommentType, PostCommentFormData, ProfileType } from '../../../../types/types';
+import {
+  CommentType,
+  EditModeType,
+  PostCommentFormData,
+  ProfileType,
+} from '../../../../types/types';
 import Post from './Post';
 import Typography from '@mui/material/Typography';
 import CreatePostCard from '../CreatePostCard/CreatePostCard';
 
 type PropsType = {
   profile: ProfileType | null;
-  handleSubmitCreatePost: (data: PostFormDataType) => void;
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  onPostCreate: (data: PostFormDataType) => void;
+  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
   posts: Array<PostType>;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
-  saveEditComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (text: string, postId: number, commentId: number) => void;
   deletePost: (postId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
-  setEditCommentMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
-  editCommentMode: { editMode: boolean; id?: number };
-  saveUpdatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
+  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
 };
 
 export type PostType = {
@@ -39,21 +44,21 @@ export interface PostFormDataType {
 const Posts: React.FC<PropsType> = ({
   profile,
   posts,
-  handleSubmitCreatePost,
-  handleSubmitCreateComment,
+  onPostCreate,
+  onCommentCreate,
   comments,
   toggleLike,
   deletePost,
   deleteComment,
   setEditCommentMode,
   editCommentMode,
-  saveEditComment,
-  saveUpdatePost,
+  updateComment,
+  updatePost,
 }) => {
   return (
     <Box width="100%">
       <Box>
-        <CreatePostCard handleSubmitCreatePost={handleSubmitCreatePost} profile={profile} />
+        <CreatePostCard onPostCreate={onPostCreate} profile={profile} />
         {!posts.length && (
           <Typography mt={8} textAlign="center" fontSize="20px" color="#8C8C8C">
             Make your first publication
@@ -63,12 +68,12 @@ const Posts: React.FC<PropsType> = ({
           return (
             <Post
               key={post.id}
-              handleSubmitCreateComment={handleSubmitCreateComment}
+              onCommentCreate={onCommentCreate}
               post={post}
               comments={comments}
               toggleLike={toggleLike}
-              saveEditComment={saveEditComment}
-              saveUpdatePost={saveUpdatePost}
+              updateComment={updateComment}
+              updatePost={updatePost}
               deletePost={deletePost}
               deleteComment={deleteComment}
               editCommentMode={editCommentMode}

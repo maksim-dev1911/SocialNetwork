@@ -12,10 +12,10 @@ import CreatePostActions from './CreatePostActions';
 
 type PropsType = {
   profile: ProfileType | null;
-  handleSubmitCreatePost: (data: PostFormDataType) => void;
+  onPostCreate: (data: PostFormDataType) => void;
 };
 
-const CreatePostCard: React.FC<PropsType> = ({ profile, handleSubmitCreatePost }) => {
+const CreatePostCard: React.FC<PropsType> = ({ profile, onPostCreate }) => {
   const [selectedPhoto, setSelectedPhoto] = useState<File | null>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<FormApi<PostFormDataType> | null>(null);
@@ -25,7 +25,7 @@ const CreatePostCard: React.FC<PropsType> = ({ profile, handleSubmitCreatePost }
       <Box display="flex" alignItems="center" p={2.5}>
         <Avatar src={profile?.photos?.large || userImg} sx={{ mr: 2 }} />
         <CreatePostCardForm
-          handleSubmitCreatePost={handleSubmitCreatePost}
+          onPostCreate={onPostCreate}
           formRef={formRef}
           photoInputRef={photoInputRef}
           setSelectedPhoto={setSelectedPhoto}

@@ -119,11 +119,18 @@ export const deletePost = createAsyncThunk<void, number>(
   async (postId, { getState, dispatch }) => {
     const state = getState() as RootState;
     const posts = postsSelector(state);
+    const comments = commentsSelector(state);
 
     const updatedPosts = posts.filter((post) => post.id !== postId);
 
+    const updatedComments = { ...comments };
+    delete updatedComments[postId];
+
     postsStorage.savePosts(updatedPosts);
+    postsStorage.savePostComments(updatedComments);
+
     dispatch(setPosts(updatedPosts));
+    dispatch(setAllComments(updatedComments));
   }
 );
 
@@ -189,24 +196,40 @@ export const getComments = createAsyncThunk('posts/getComments', async (_, { dis
 export const deleteComment = createAsyncThunk<void, { postId: number; commentId: number }>(
   'posts/deleteComment',
   async ({ postId, commentId }, { dispatch, getState }) => {
-    dispatch(deletePostComment({ postId, commentId }));
-
     const state = getState() as RootState;
     const comments = commentsSelector(state);
 
-    postsStorage.savePostComments(comments);
+    const updateComments = {
+      ...comments,
+      [postId]: comments[postId].filter((comment) => comment.id !== commentId),
+    };
+
+    dispatch(deletePostComment({ postId, commentId }));
+
+    postsStorage.savePostComments(updateComments);
   }
 );
 
-export const updateComment = createAsyncThunk<
+export const updateCommentThunk = createAsyncThunk<
   void,
   { text: string; postId: number; commentId: number }
 >('posts/editComment', async ({ postId, commentId, text }, { dispatch, getState }) => {
+  const state = getState() as RootState;
+  const comments = commentsSelector(state);
+
+  const postComments = comments[postId].map((comment) => {
+    if (comment.id === commentId) {
+      return { ...comment, text };
+    }
+
+    return comment;
+  });
+
+  const updatedComments = { ...comments, [postId]: postComments };
+
   dispatch(setUpdateComment({ text, postId, commentId }));
 
-  const state = getState() as RootState;
-
-  postsStorage.savePostComments(state.profile.comments);
+  postsStorage.savePostComments(updatedComments);
 });
 
 export type DataUpdatedPost = {
@@ -215,11 +238,14 @@ export type DataUpdatedPost = {
   postId: number;
 };
 
-export const updatePost = createAsyncThunk<
+export const updatePostThunk = createAsyncThunk<
   void,
   { text: string; photo: File | null; postId: number; removePhoto: boolean }
 >('posts/updatePost', async ({ text, photo, postId, removePhoto }, { dispatch, getState }) => {
   const updatedPost = (reader?: FileReader) => {
+    const state = getState() as RootState;
+    const posts = postsSelector(state);
+
     const dataUpdatedPost: DataUpdatedPost = {
       postId: postId,
     };
@@ -234,11 +260,19 @@ export const updatePost = createAsyncThunk<
       dataUpdatedPost.photo = reader.result as string;
     }
 
+    const updatedPosts = posts.map((post) => {
+      if (post.id !== postId) return post;
+
+      return {
+        ...post,
+        ...(dataUpdatedPost.text !== undefined ? { text: dataUpdatedPost.text } : {}),
+        ...(dataUpdatedPost.photo !== undefined ? { photo: dataUpdatedPost.photo } : {}),
+      };
+    });
+
     dispatch(setUpdatePost(dataUpdatedPost));
 
-    const state = getState() as RootState;
-
-    postsStorage.savePosts(state.profile.posts);
+    postsStorage.savePosts(updatedPosts);
   };
 
   if (photo) {

@@ -16,12 +16,13 @@ import { FormApi } from 'final-form';
 import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
+import { EditModeType } from '../../../../types/types';
 
 type PropsType = {
   open: boolean;
   newText: string;
-  onClose: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
-  saveUpdatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  onClose: Dispatch<SetStateAction<EditModeType>>;
+  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
   onChange: (value: string) => void;
   post: PostType;
   newPhoto: File | null;
@@ -36,7 +37,7 @@ export const EditPostModal: React.FC<PropsType> = ({
   newText,
   newPhoto,
   onClose,
-  saveUpdatePost,
+  updatePost,
   onChange,
   post,
   photoInputRef,
@@ -96,7 +97,7 @@ export const EditPostModal: React.FC<PropsType> = ({
             />
 
             <Typography textAlign="right" color="text.secondary" my={1}>
-              {newText.length}/500
+              {newText?.length}/500
             </Typography>
             <CreatePostActions
               setSelectedPhoto={setNewPhoto}
@@ -253,10 +254,10 @@ export const EditPostModal: React.FC<PropsType> = ({
           <LoadingButton
             variant="contained"
             onClick={() => {
-              saveUpdatePost(post.id, newText, newPhoto, removePhoto);
+              updatePost(post.id, newText, newPhoto, removePhoto);
               onClose({ editMode: false });
             }}
-            disabled={!newText.trim()}
+            disabled={!newText?.trim()}
           >
             Save changes
           </LoadingButton>

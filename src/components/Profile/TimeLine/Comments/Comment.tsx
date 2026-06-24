@@ -2,9 +2,9 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { CommentType } from '../../../../types/types';
+import { CommentType, EditModeType } from '../../../../types/types';
 import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
-import DropDown from '../../../Common/DropDown/DropDown';
+import DropDown from '../../../Common/DropDown/ActionsDropdown';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import sx from '../TimeLine.style';
@@ -12,10 +12,10 @@ import sx from '../TimeLine.style';
 type PropsType = {
   comment: CommentType;
   postId: number;
-  saveEditComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (text: string, postId: number, commentId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
-  setEditCommentMode: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
-  editCommentMode: { editMode: boolean; id?: number };
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
 };
 
 const Comment: React.FC<PropsType> = ({
@@ -24,9 +24,11 @@ const Comment: React.FC<PropsType> = ({
   postId,
   setEditCommentMode,
   editCommentMode,
-  saveEditComment,
+  updateComment,
 }) => {
   const [commentText, setCommentText] = useState(comment.text);
+
+  const isEditMode = editCommentMode.editMode && editCommentMode.id === comment.id;
 
   return (
     <Box p="10px 16px 10px 16px" alignItems="center">
@@ -48,19 +50,19 @@ const Comment: React.FC<PropsType> = ({
           <DropDown
             id={comment.id}
             label="Edit Comment"
-            setEditMode={setEditCommentMode}
-            deletePost={() => deleteComment(postId, comment.id)}
+            onUpdate={setEditCommentMode}
+            onDelete={() => deleteComment(postId, comment.id)}
           />
         </Box>
       </Box>
-      {(!editCommentMode.editMode || editCommentMode.id !== comment.id) && (
+      {!isEditMode && (
         <Box mt={2}>
-          <Typography fontSize="15px" color="#374151" p={1}>
+          <Typography fontSize="15px" color="#374151">
             {comment.text}
           </Typography>
         </Box>
       )}
-      {editCommentMode.editMode && editCommentMode.id === comment.id && (
+      {isEditMode && (
         <Box mt={2}>
           <TextField
             sx={sx.addPostInput}
@@ -73,7 +75,7 @@ const Comment: React.FC<PropsType> = ({
             </Button>
             <Button
               variant="contained"
-              onClick={() => saveEditComment(commentText, postId, comment.id)}
+              onClick={() => updateComment(commentText, postId, comment.id)}
             >
               Save
             </Button>
