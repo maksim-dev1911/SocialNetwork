@@ -1,34 +1,88 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { Stack } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import TextFieldControlled from '../Fields/TextFieldControlled/TextFieldControlled';
 import LoadingButton from '@mui/lab/LoadingButton';
-import sendMessageImg from '../../images/send.png';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
+
+export type FormValues = {
+  message: string;
+};
 
 type PropsType = {
-  onSubmit: (sendMessage: string) => void;
+  onSubmit: (values: FormValues) => void;
 };
 
 const SendMessageForm: React.FC<PropsType> = ({ onSubmit }) => {
   return (
     <Stack mt={5}>
-      <Form
-        onSubmit={onSubmit}
-        render={({ handleSubmit, submitting }) => (
-          <form style={{ display: 'flex', alignItems: 'center', gap: 5 }} onSubmit={handleSubmit}>
-            <TextFieldControlled
-              name="message"
-              type="text"
-              size="small"
-              sx={{ width: '100%', borderRadius: '100px' }}
-            />
-            <Stack>
-              <LoadingButton disabled={submitting} loading={submitting} type="submit">
-                <img src={sendMessageImg} alt="send" style={{ width: '30px', height: '30px' }} />
-              </LoadingButton>
-            </Stack>
-          </form>
-        )}
+      <Form<FormValues>
+        onSubmit={(values, form) => {
+          onSubmit(values);
+
+          form.reset();
+        }}
+        render={({ handleSubmit, values, submitting, form }) => {
+          return (
+            <Paper
+              elevation={0}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                p: 1,
+                borderRadius: 4,
+                border: '1px solid',
+                borderColor: 'divider',
+                bgcolor: 'background.paper',
+              }}
+            >
+              <form
+                style={{ display: 'flex', alignItems: 'center', gap: 5, width: '100%' }}
+                onSubmit={handleSubmit}
+              >
+                <TextFieldControlled
+                  fullWidth
+                  multiline
+                  placeholder="Введите сообщение..."
+                  name="message"
+                  type="text"
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  sx={{
+                    px: 1,
+
+                    '& .MuiInputBase-root': {
+                      fontSize: 15,
+                    },
+
+                    '& textarea': {
+                      lineHeight: 1.6,
+                    },
+                  }}
+                />
+                <Stack>
+                  <LoadingButton
+                    disabled={!values.message?.trim() || submitting}
+                    loading={submitting}
+                    type="submit"
+                    color="primary"
+                    sx={{
+                      minWidth: 44,
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      boxShadow: 2,
+                    }}
+                  >
+                    <SendRoundedIcon />
+                  </LoadingButton>
+                </Stack>
+              </form>
+            </Paper>
+          );
+        }}
       />
     </Stack>
   );

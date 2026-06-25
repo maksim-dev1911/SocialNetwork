@@ -7,6 +7,9 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { usersMessagesSelector } from '../../store/chat/chat.selectors';
 import { connectToWs } from '../../api';
 import { sx } from '../../components/Chat/Messages.style';
+import { FormValues } from '../../components/Chat/SendMessageForm';
+import { clearMessages } from '../../store/chat/chatSlice';
+import PageLayout from '../../components/Common/PageLayout/PageLayout';
 
 const Chat = () => {
   const usersMessages = useAppSelector(usersMessagesSelector);
@@ -25,25 +28,39 @@ const Chat = () => {
   }, [usersMessages]);
 
   useEffect(() => {
-    wsRef.current = connectToWs();
+    const ws = connectToWs();
 
-    wsRef.current.addEventListener('message', (e: MessageEvent) => {
+    const handleMessage = (e: MessageEvent) => {
+      const data = JSON.parse(e.data);
 
-      dispatch(userMessage(JSON.parse(e.data)));
-    });
-  }, []);
+      console.log('FROM WS', data.length);
+      dispatch(userMessage(data));
+    };
 
-  const handleSubmit = (sendMessage: string) => {
-    wsRef.current.send(Object.values(sendMessage).toString());
+    ws.addEventListener('message', handleMessage);
+
+    wsRef.current = ws;
+
+    return () => {
+      ws.removeEventListener('message', handleMessage);
+      ws.close();
+
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
+
+  const handleSubmit = (values: FormValues) => {
+    wsRef.current.send(Object.values(values).toString());
   };
 
   return (
-    <Box sx={sx.messagesWrapper}>
-      <Typography mb={5} variant='h5'>
-        Common Chat
-      </Typography>
-      <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
-      <SendMessageForm onSubmit={handleSubmit} />
+    <Box>
+      <PageLayout title="Common chat" description="Connect with community members">
+        <Box sx={sx.messagesWrapper}>
+          <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
+          <SendMessageForm onSubmit={handleSubmit} />
+        </Box>
+      </PageLayout>
     </Box>
   );
 };
