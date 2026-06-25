@@ -8,6 +8,8 @@ import { usersMessagesSelector } from '../../store/chat/chat.selectors';
 import { connectToWs } from '../../api';
 import { sx } from '../../components/Chat/Messages.style';
 import { FormValues } from '../../components/Chat/SendMessageForm';
+import { clearMessages } from '../../store/chat/chatSlice';
+import PageLayout from '../../components/Common/PageLayout/PageLayout';
 
 const Chat = () => {
   const usersMessages = useAppSelector(usersMessagesSelector);
@@ -26,12 +28,26 @@ const Chat = () => {
   }, [usersMessages]);
 
   useEffect(() => {
-    wsRef.current = connectToWs();
+    const ws = connectToWs();
 
-    wsRef.current.addEventListener('message', (e: MessageEvent) => {
-      dispatch(userMessage(JSON.parse(e.data)));
-    });
-  }, []);
+    const handleMessage = (e: MessageEvent) => {
+      const data = JSON.parse(e.data);
+
+      console.log('FROM WS', data.length);
+      dispatch(userMessage(data));
+    };
+
+    ws.addEventListener('message', handleMessage);
+
+    wsRef.current = ws;
+
+    return () => {
+      ws.removeEventListener('message', handleMessage);
+      ws.close();
+
+      dispatch(clearMessages());
+    };
+  }, [dispatch]);
 
   const handleSubmit = (values: FormValues) => {
     wsRef.current.send(Object.values(values).toString());
@@ -39,31 +55,12 @@ const Chat = () => {
 
   return (
     <Box>
-      <Typography
-        variant="h4"
-        fontWeight={800}
-        sx={{
-          letterSpacing: '-0.04em',
-          color: 'text.primary',
-        }}
-      >
-        Common chat
-      </Typography>
-
-      <Typography
-        variant="body1"
-        sx={{
-          mt: 0.5,
-          color: 'text.secondary',
-          fontWeight: 500,
-        }}
-      >
-        Connect with community members
-      </Typography>
-      <Box sx={sx.messagesWrapper}>
-        <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
-        <SendMessageForm onSubmit={handleSubmit} />
-      </Box>
+      <PageLayout title="Common chat" description="Connect with community members">
+        <Box sx={sx.messagesWrapper}>
+          <Messages usersMessages={usersMessages} messagesEndRef={messagesEndRef} />
+          <SendMessageForm onSubmit={handleSubmit} />
+        </Box>
+      </PageLayout>
     </Box>
   );
 };
