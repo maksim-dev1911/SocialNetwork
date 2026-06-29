@@ -28,7 +28,13 @@ const Users: React.FC<PropsType> = ({
 }) => {
   return (
     <>
-      <Stack gap={4} p={4}>
+      <Stack
+        bgcolor="#fff"
+        borderRadius="24px"
+        boxShadow="0px 8px 30px rgba(15, 23, 42, 0.05)"
+        overflow="hidden"
+        mt={4}
+      >
         {users.map((user) => (
           <User follow={follow} unfollow={unfollow} user={user} isLoading={isLoading} isSm={isSm} />
         ))}

@@ -12,17 +12,17 @@ import {
   setNewPostComment,
   setPosts,
   setAllComments,
-  deletePostComment,
-  setUpdateComment,
-  setUpdatePost,
-  // deletePostComment,
 } from './profileSlice';
 import { PostFormDataType, PostType } from '../../components/Profile/TimeLine/Posts/Posts';
 import { RootState } from '../index';
-import { CommentType, PostCommentFormData } from '../../types/types';
+import {
+  CommentType,
+  PostCommentFormData,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../types/types';
 import * as postsStorage from '../../storage/posts';
 import { commentsSelector, postsSelector } from './profile.selectors';
-import { savePosts } from '../../storage/posts';
 
 export const getUserProfile = createAsyncThunk(
   'profile/userId',
@@ -121,7 +121,7 @@ export const deletePost = createAsyncThunk<void, number>(
     const posts = postsSelector(state);
     const comments = commentsSelector(state);
 
-    const updatedPosts = posts.filter((post) => post.id !== postId);
+    const updatedPosts = posts.filter((post) => post.id !== postId) || [];
 
     const updatedComments = { ...comments };
     delete updatedComments[postId];
@@ -150,16 +150,13 @@ export const getPostsThunk = createAsyncThunk<PostType[]>(
   }
 );
 
-export const createComment = createAsyncThunk<void, CreateCommentPayload>(
+export const createComment = createAsyncThunk<void, { postId: number; commentText: string }>(
   'posts/createComment',
   async (commentData, { dispatch, getState }) => {
     const state = getState() as RootState;
     const comments = commentsSelector(state);
 
-    const {
-      postId,
-      formData: { text },
-    } = commentData;
+    const { postId, commentText } = commentData;
     const post = state.profile.posts.find((p) => p.id === postId);
     const user = state.profile.profile;
 
@@ -172,7 +169,7 @@ export const createComment = createAsyncThunk<void, CreateCommentPayload>(
     }
 
     const comment: CommentType = {
-      text,
+      commentText,
       creatorAvatar: user.photos?.large,
       creatorFullName: user.fullName,
       createdAt: Date.now(),
@@ -201,36 +198,36 @@ export const deleteComment = createAsyncThunk<void, { postId: number; commentId:
 
     const updateComments = {
       ...comments,
-      [postId]: comments[postId].filter((comment) => comment.id !== commentId),
+      [postId]: comments[postId].filter((comment) => comment.id !== commentId) || [],
     };
 
-    dispatch(deletePostComment({ postId, commentId }));
+    dispatch(setAllComments(updateComments));
 
     postsStorage.savePostComments(updateComments);
   }
 );
 
-export const updateCommentThunk = createAsyncThunk<
-  void,
-  { text: string; postId: number; commentId: number }
->('posts/editComment', async ({ postId, commentId, text }, { dispatch, getState }) => {
-  const state = getState() as RootState;
-  const comments = commentsSelector(state);
+export const updateCommentThunk = createAsyncThunk<void, UpdateCommentPayloadType>(
+  'posts/editComment',
+  async ({ postId, commentId, commentText }, { dispatch, getState }) => {
+    const state = getState() as RootState;
+    const comments = commentsSelector(state);
 
-  const postComments = comments[postId].map((comment) => {
-    if (comment.id === commentId) {
-      return { ...comment, text };
-    }
+    const postComments = comments[postId].map((comment) => {
+      if (comment.id === commentId) {
+        return { ...comment, commentText };
+      }
 
-    return comment;
-  });
+      return comment;
+    });
 
-  const updatedComments = { ...comments, [postId]: postComments };
+    const updatedComments = { ...comments, [postId]: postComments } || [];
 
-  dispatch(setUpdateComment({ text, postId, commentId }));
+    dispatch(setAllComments(updatedComments));
 
-  postsStorage.savePostComments(updatedComments);
-});
+    postsStorage.savePostComments(updatedComments);
+  }
+);
 
 export type DataUpdatedPost = {
   text?: string;
@@ -238,52 +235,52 @@ export type DataUpdatedPost = {
   postId: number;
 };
 
-export const updatePostThunk = createAsyncThunk<
-  void,
-  { text: string; photo: File | null; postId: number; removePhoto: boolean }
->('posts/updatePost', async ({ text, photo, postId, removePhoto }, { dispatch, getState }) => {
-  const updatedPost = (reader?: FileReader) => {
-    const state = getState() as RootState;
-    const posts = postsSelector(state);
+export const updatePostThunk = createAsyncThunk<void, UpdatePostPayloadType>(
+  'posts/updatePost',
+  async ({ newText, photo, postId, removePhoto }, { dispatch, getState }) => {
+    const updatedPost = (reader?: FileReader) => {
+      const state = getState() as RootState;
+      const posts = postsSelector(state);
 
-    const dataUpdatedPost: DataUpdatedPost = {
-      postId: postId,
-    };
-
-    if (text) {
-      dataUpdatedPost.text = text;
-    }
-
-    if (removePhoto) {
-      dataUpdatedPost.photo = null;
-    } else if (reader?.result) {
-      dataUpdatedPost.photo = reader.result as string;
-    }
-
-    const updatedPosts = posts.map((post) => {
-      if (post.id !== postId) return post;
-
-      return {
-        ...post,
-        ...(dataUpdatedPost.text !== undefined ? { text: dataUpdatedPost.text } : {}),
-        ...(dataUpdatedPost.photo !== undefined ? { photo: dataUpdatedPost.photo } : {}),
+      const dataUpdatedPost: DataUpdatedPost = {
+        postId: postId,
       };
-    });
 
-    dispatch(setUpdatePost(dataUpdatedPost));
+      if (newText) {
+        dataUpdatedPost.text = newText;
+      }
 
-    postsStorage.savePosts(updatedPosts);
-  };
+      if (removePhoto) {
+        dataUpdatedPost.photo = null;
+      } else if (reader?.result) {
+        dataUpdatedPost.photo = reader.result as string;
+      }
 
-  if (photo) {
-    const reader = new FileReader();
+      const updatedPosts = posts.map((post) => {
+        if (post.id !== postId) return post;
 
-    reader.onload = () => {
-      updatedPost(reader);
+        return {
+          ...post,
+          ...(dataUpdatedPost.text !== undefined ? { text: dataUpdatedPost.text } : {}),
+          ...(dataUpdatedPost.photo !== undefined ? { photo: dataUpdatedPost.photo } : {}),
+        };
+      });
+
+      dispatch(setPosts(updatedPosts));
+
+      postsStorage.savePosts(updatedPosts);
     };
 
-    reader.readAsDataURL(photo);
-  } else {
-    updatedPost();
+    if (photo) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        updatedPost(reader);
+      };
+
+      reader.readAsDataURL(photo);
+    } else {
+      updatedPost();
+    }
   }
-});
+);

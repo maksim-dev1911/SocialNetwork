@@ -94,41 +94,6 @@ const profileSlice = createSlice({
     setPosts: (state, action: PayloadAction<Array<PostType>>) => {
       state.posts = action.payload;
     },
-    deletePostComment: (state, action: PayloadAction<{ postId: number; commentId: number }>) => {
-      const { postId, commentId } = action.payload;
-
-      state.comments[postId] = state.comments[postId].filter((comment) => comment.id !== commentId);
-
-      if (state.comments[postId].length === 0) {
-        delete state.comments[postId];
-      }
-    },
-    setUpdateComment: (
-      state,
-      action: PayloadAction<{ text: string; postId: number; commentId: number }>
-    ) => {
-      const { postId, commentId, text } = action.payload;
-
-      const comment = state.comments[postId].find((comment) => comment.id === commentId);
-
-      if (comment) {
-        comment.text = text;
-      }
-    },
-    setUpdatePost: (state, action: PayloadAction<DataUpdatedPost>) => {
-      const { postId, text, photo } = action.payload;
-
-      const post = state.posts.find((post) => post.id === postId);
-
-      if (post) {
-        if (text) {
-          post.text = text;
-        }
-        if ('photo' in action.payload) {
-          post.photo = photo;
-        }
-      }
-    },
   },
 });
 
@@ -145,9 +110,6 @@ export const {
   setAllComments,
   toggleLike,
   setPosts,
-  deletePostComment,
-  setUpdateComment,
-  setUpdatePost,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;

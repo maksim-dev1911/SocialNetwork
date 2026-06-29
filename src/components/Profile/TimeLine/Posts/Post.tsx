@@ -1,24 +1,29 @@
 import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import { PostFormDataType, PostType } from './Posts';
-import { CommentType, EditModeType, PostCommentFormData } from '../../../../types/types';
+import {
+  CommentType,
+  EditModeType,
+  PostCommentFormData,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../../../types/types';
 import Comments from '../Comments/Comments';
 import { EditPostModal } from './EditPostModal';
-import { FormApi } from 'final-form';
 import PostLayout from './PostLayout';
 import sx from '../TimeLine.style';
 
 type PropsType = {
   post: PostType;
-  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, commentText: string) => void;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
-  updateComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   deletePost: (postId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
   setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
   editCommentMode: EditModeType;
-  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  updatePost: (data: UpdatePostPayloadType) => void;
 };
 
 const Post: React.FC<PropsType> = ({
@@ -40,8 +45,6 @@ const Post: React.FC<PropsType> = ({
   });
   const [newText, setNewText] = useState(post.text);
   const [newPhoto, setNewPhoto] = useState<File | null>(null);
-  const photoInputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<FormApi<PostFormDataType> | null>(null);
 
   const toggleIsOpen = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -58,8 +61,6 @@ const Post: React.FC<PropsType> = ({
         post={post}
         newPhoto={newPhoto}
         setNewPhoto={setNewPhoto}
-        formRef={formRef}
-        photoInputRef={photoInputRef}
         commentsCount={comments[post.id]?.length || 0}
       />
     );

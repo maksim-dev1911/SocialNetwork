@@ -3,13 +3,16 @@ import { StylesRecord } from '../../../interfaces/Styles';
 
 export const sx: StylesRecord = {
   wrapper: () => ({
-    bgcolor: '#fff',
-    borderRadius: 6,
-    border: '1px solid rgba(226,232,240,.6)',
-    boxShadow: '0 12px 32px rgba(15,23,42,.06)',
-    p: 3,
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
+    px: 4,
+    py: 3,
+    borderBottom: '1px solid #F1F5F9',
+
+    '&:hover': {
+      backgroundColor: '#FAFBFF',
+    },
   }),
   wrapperMobile: () => ({
     borderRadius: '5px',
@@ -28,12 +31,27 @@ export const sx: StylesRecord = {
     mb: 1,
     mt: 2,
   }),
+  buttonStyle: () => ({
+    minWidth: 160,
+    height: 44,
+    borderRadius: '12px',
+    borderColor: '#D9D6FE',
+    color: '#635BFF',
+    fontSize: '15px',
+    fontWeight: 600,
+    textTransform: 'none',
+
+    '&:hover': {
+      borderColor: '#635BFF',
+      backgroundColor: 'rgba(99, 91, 255, 0.04)',
+    },
+  }),
 };
 export const Avatar = styled('div')(
   () => `
   img {
-    width: 130px;
-    height: 130px;
+    width: 70px;
+    height: 70px;
     border-radius: 100%
   }
 `

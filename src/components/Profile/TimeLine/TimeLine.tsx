@@ -1,22 +1,29 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { Grid } from '@mui/material';
-import { CommentType, EditModeType, PostCommentFormData, ProfileType } from '../../../types/types';
+import {
+  CommentType,
+  EditModeType,
+  PostCommentFormData,
+  ProfileType,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../../types/types';
 import Posts, { PostFormDataType, PostType } from './Posts/Posts';
 
 type PropsType = {
   isSm: boolean;
   onPostCreate: (data: PostFormDataType) => void;
-  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, commentText: string) => void;
   profile: ProfileType | null;
   posts: Array<PostType>;
   comments: Record<number, CommentType[]>;
-  updateComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
   editCommentMode: EditModeType;
   toggleLike: (postId: number) => void;
   deletePost: (postId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
-  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  updatePost: (data: UpdatePostPayloadType) => void;
 };
 
 const TimeLine: React.FC<PropsType> = ({

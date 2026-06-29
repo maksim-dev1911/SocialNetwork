@@ -10,12 +10,13 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Divider from '@mui/material/Divider';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Dispatch, SetStateAction } from 'react';
+import { EditModeType } from '../../../types/types';
 
 type PropsType = {
   id: number;
   label: string;
   onDelete: (id: number) => void;
-  onUpdate: Dispatch<SetStateAction<{ editMode: boolean; id?: number }>>;
+  onUpdate: Dispatch<SetStateAction<EditModeType>>;
 };
 
 const ActionsDropdown: React.FC<PropsType> = ({ onDelete, id, label, onUpdate }) => {

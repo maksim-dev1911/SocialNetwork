@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { CommentType, EditModeType } from '../../../../types/types';
+import { CommentType, EditModeType, UpdateCommentPayloadType } from '../../../../types/types';
 import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
 import DropDown from '../../../Common/DropDown/ActionsDropdown';
 import { TextField } from '@mui/material';
@@ -12,7 +12,7 @@ import sx from '../TimeLine.style';
 type PropsType = {
   comment: CommentType;
   postId: number;
-  updateComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   deleteComment: (postId: number, commentId: number) => void;
   setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
   editCommentMode: EditModeType;
@@ -26,9 +26,15 @@ const Comment: React.FC<PropsType> = ({
   editCommentMode,
   updateComment,
 }) => {
-  const [commentText, setCommentText] = useState(comment.text);
+  const [commentText, setCommentText] = useState(comment.commentText);
 
   const isEditMode = editCommentMode.editMode && editCommentMode.id === comment.id;
+
+  const updateCommentData: UpdateCommentPayloadType = {
+    postId,
+    commentText,
+    commentId: comment.id,
+  };
 
   return (
     <Box p="10px 16px 10px 16px" alignItems="center">
@@ -58,7 +64,7 @@ const Comment: React.FC<PropsType> = ({
       {!isEditMode && (
         <Box mt={2}>
           <Typography fontSize="15px" color="#374151">
-            {comment.text}
+            {comment.commentText}
           </Typography>
         </Box>
       )}
@@ -67,16 +73,13 @@ const Comment: React.FC<PropsType> = ({
           <TextField
             sx={sx.addPostInput}
             onChange={(e) => setCommentText(e.currentTarget.value)}
-            defaultValue={comment.text}
+            defaultValue={comment.commentText}
           />
           <Box display="flex" alignItems="center" gap={2} mt={2} justifyContent="flex-end">
             <Button onClick={() => setEditCommentMode({ editMode: false })} variant="outlined">
               Cancel
             </Button>
-            <Button
-              variant="contained"
-              onClick={() => updateComment(commentText, postId, comment.id)}
-            >
+            <Button variant="contained" onClick={() => updateComment(updateCommentData)}>
               Save
             </Button>
           </Box>

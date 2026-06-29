@@ -11,24 +11,22 @@ import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import { PostFormDataType, PostType } from './Posts';
 import LoadingButton from '@mui/lab/LoadingButton';
-import CreatePostActions from '../CreatePostCard/CreatePostActions';
+import CreatePostActions from './CreatePostCard/CreatePostActions';
 import { FormApi } from 'final-form';
 import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
-import { EditModeType } from '../../../../types/types';
+import { EditModeType, UpdatePostPayloadType } from '../../../../types/types';
 
 type PropsType = {
   open: boolean;
-  newText: string;
+  newText?: string | null;
   onClose: Dispatch<SetStateAction<EditModeType>>;
-  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  updatePost: (data: UpdatePostPayloadType) => void;
   onChange: (value: string) => void;
   post: PostType;
   newPhoto: File | null;
   setNewPhoto: React.Dispatch<React.SetStateAction<File | null>>;
-  photoInputRef: React.RefObject<HTMLInputElement>;
-  formRef: React.MutableRefObject<FormApi<PostFormDataType> | null>;
   commentsCount: number;
 };
 
@@ -40,8 +38,6 @@ export const EditPostModal: React.FC<PropsType> = ({
   updatePost,
   onChange,
   post,
-  photoInputRef,
-  formRef,
   setNewPhoto,
   commentsCount,
 }) => {
@@ -56,6 +52,13 @@ export const EditPostModal: React.FC<PropsType> = ({
 
     return post.photo;
   }, [newPhoto, post.photo, removePhoto]);
+
+  const updatePostData: UpdatePostPayloadType = {
+    postId: post.id,
+    newText,
+    photo: newPhoto,
+    removePhoto,
+  };
 
   return (
     <Modal open={open} onClose={() => onClose}>
@@ -101,20 +104,8 @@ export const EditPostModal: React.FC<PropsType> = ({
             </Typography>
             <CreatePostActions
               setSelectedPhoto={setNewPhoto}
-              photoInputRef={photoInputRef}
-              formRef={formRef}
-            />
-            <input
-              ref={photoInputRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-
-                if (!file) return;
-
-                setNewPhoto(file);
+              onPhotoChange={(value) => {
+                setNewPhoto(value);
                 setRemovePhoto(false);
               }}
             />
@@ -254,7 +245,7 @@ export const EditPostModal: React.FC<PropsType> = ({
           <LoadingButton
             variant="contained"
             onClick={() => {
-              updatePost(post.id, newText, newPhoto, removePhoto);
+              updatePost(updatePostData);
               onClose({ editMode: false });
             }}
             disabled={!newText?.trim()}

@@ -1,28 +1,30 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import Box from '@mui/material/Box';
 import {
   CommentType,
   EditModeType,
   PostCommentFormData,
   ProfileType,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
 } from '../../../../types/types';
 import Post from './Post';
 import Typography from '@mui/material/Typography';
-import CreatePostCard from '../CreatePostCard/CreatePostCard';
+import CreatePostCard from './CreatePostCard/CreatePostCard';
 
 type PropsType = {
   profile: ProfileType | null;
   onPostCreate: (data: PostFormDataType) => void;
-  onCommentCreate: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, commentText: string) => void;
   posts: Array<PostType>;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
-  updateComment: (text: string, postId: number, commentId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   deletePost: (postId: number) => void;
   deleteComment: (postId: number, commentId: number) => void;
   setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
   editCommentMode: EditModeType;
-  updatePost: (postId: number, text: string, photo: File | null, removePhoto: boolean) => void;
+  updatePost: (data: UpdatePostPayloadType) => void;
 };
 
 export type PostType = {
@@ -38,7 +40,7 @@ export type PostType = {
 
 export interface PostFormDataType {
   text: string;
-  photo: File;
+  photo: File | null;
 }
 
 const Posts: React.FC<PropsType> = ({

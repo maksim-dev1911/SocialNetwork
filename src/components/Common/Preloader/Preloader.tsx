@@ -1,16 +1,15 @@
 import React from 'react';
-import {CircularProgress, Stack, SxProps, Theme} from "@mui/material";
+import { CircularProgress, Stack } from '@mui/material';
+import { sx } from './Preloader.style';
 
-type PropsType = {
-    sx: SxProps<Theme> | undefined
-}
+type PropsType = {};
 
-const Preloader: React.FC<PropsType> = ({sx}) => {
-    return (
-        <Stack sx={sx}>
-            <CircularProgress sx={{color: '#6252CE'}} size={50}/>
-        </Stack>
-    );
+const Preloader: React.FC<PropsType> = () => {
+  return (
+    <Stack sx={sx.preloaderStyle}>
+      <CircularProgress size={50} sx={{ color: '#6252CE' }} />
+    </Stack>
+  );
 };
 
 export default React.memo(Preloader);

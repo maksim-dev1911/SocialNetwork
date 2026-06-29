@@ -50,7 +50,7 @@ export type UserMessageType = {
 
 export type CommentType = {
   createdAt: number;
-  text: string;
+  commentText: string;
   creatorFullName: string;
   creatorAvatar?: string;
   id: number;
@@ -79,4 +79,17 @@ export type PostCommentFormData = {
 export type EditModeType = {
   editMode: boolean;
   id?: number;
+};
+
+export type UpdateCommentPayloadType = {
+  commentText: string;
+  postId: number;
+  commentId: number;
+};
+
+export type UpdatePostPayloadType = {
+  postId: number;
+  newText?: string | null;
+  photo: File | null;
+  removePhoto: boolean;
 };
