@@ -14,11 +14,14 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     getUserMessage: (state, action: PayloadAction<UserMessageType[]>) => {
-      state.usersMessages = [...state.usersMessages, ...action.payload];
+      state.usersMessages.push(...action.payload);
+    },
+    clearMessages: (state) => {
+      state.usersMessages = [];
     },
   },
 });
 
-export const { getUserMessage } = chatSlice.actions;
+export const { getUserMessage, clearMessages } = chatSlice.actions;
 
 export default chatSlice.reducer;
