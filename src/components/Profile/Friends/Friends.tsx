@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { UserType } from '../../../types/types';
-import { Grid, Pagination } from '@mui/material';
+import { Grid, Pagination, Theme, useMediaQuery } from '@mui/material';
 import Friend from './Friend';
 import Typography from '@mui/material/Typography';
 import Preloader from '../../Common/Preloader/Preloader';
@@ -28,6 +28,8 @@ const Friends: React.FC<PropsType> = ({
   pageSize,
   followingInProgress,
 }) => {
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
   if (!userFriends.length) {
     return (
       <Typography sx={{ textAlign: 'center', fontSize: '20px', pb: 5, color: '#8C8C8C' }}>
@@ -45,15 +47,22 @@ const Friends: React.FC<PropsType> = ({
       <Typography fontSize="19px">Friends ({userFriends?.length})</Typography>
       <Grid sx={sx.gridContainer} container>
         {userFriends.map((friend) => (
-          <Friend followingInProgress={followingInProgress} unfollow={unfollow} user={friend} />
+          <Friend
+            key={friend.id}
+            followingInProgress={followingInProgress}
+            unfollow={unfollow}
+            user={friend}
+          />
         ))}
       </Grid>
-      <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center" sx={{ overflowX: 'auto', maxWidth: '100%' }}>
         <Pagination
           page={currentPage}
           onChange={pageChanged}
           count={Math.ceil(totalUsersCount / pageSize)}
-          size="large"
+          size={isXs ? 'small' : 'large'}
+          siblingCount={isXs ? 0 : 1}
+          boundaryCount={1}
           variant="outlined"
           defaultPage={1}
           color="primary"

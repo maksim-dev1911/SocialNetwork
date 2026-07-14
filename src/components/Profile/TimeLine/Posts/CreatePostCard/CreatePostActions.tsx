@@ -50,17 +50,29 @@ const CreatePostActions: React.FC<PropsType> = ({
           gap={1}
           px={1.5}
           py={0.5}
-          ml={9}
+          ml={{ xs: 2, sm: 9 }}
           mb={2}
+          maxWidth="100%"
           borderRadius="20px"
           bgcolor="#F3F4F6"
         >
-          <Typography variant="body2">{selectedPhoto.name}</Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: { xs: 160, sm: 280 },
+            }}
+          >
+            {selectedPhoto.name}
+          </Typography>
           <IconButton
             size="small"
             onClick={clearInput}
             sx={{
               p: '2px',
+              flexShrink: 0,
               '&:hover': {
                 backgroundColor: 'rgba(239,68,68,.08)',
                 color: 'error.main',
@@ -72,7 +84,7 @@ const CreatePostActions: React.FC<PropsType> = ({
         </Box>
       )}
       <Divider />
-      <Box display="flex" gap={1} p={2}>
+      <Box display="flex" flexWrap="wrap" gap={1} p={{ xs: 1, sm: 2 }}>
         {actionButtons.map((item) => (
           <Box key={item.type}>
             {item.element || (
@@ -80,7 +92,7 @@ const CreatePostActions: React.FC<PropsType> = ({
                 display="flex"
                 alignItems="center"
                 gap={1}
-                px={2}
+                px={{ xs: 1, sm: 2 }}
                 sx={{
                   cursor: 'pointer',
                   transition: 'all .2s ease',
@@ -91,7 +103,11 @@ const CreatePostActions: React.FC<PropsType> = ({
                 }}
               >
                 {item.icon}
-                <Typography variant="body2" lineHeight={1}>
+                <Typography
+                  variant="body2"
+                  lineHeight={1}
+                  sx={{ display: { xs: 'none', sm: 'block' } }}
+                >
                   {item.text}
                 </Typography>
               </Box>

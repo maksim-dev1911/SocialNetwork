@@ -30,17 +30,19 @@ const CreatePostCard: React.FC<PropsType> = ({ profile, onPostCreate }) => {
 
   return (
     <Box sx={sx.addPostWrapper}>
-      <Box display="flex" alignItems="center" p={2.5}>
-        <Avatar src={profile?.photos?.large || userImg} sx={{ mr: 2 }} />
-        <TextSubmitInput
-          text={text}
-          isSubmitting={isSubmitting}
-          handleSubmit={handleSubmit}
-          onChange={setText}
-          photo={selectedPhoto}
-          sxInput={sx.addPostInput}
-          placeholder={`What's new with you, ${profile?.fullName}?`}
-        />
+      <Box display="flex" alignItems="center" p={{ xs: 1.5, sm: 2.5 }} sx={{ minWidth: 0 }}>
+        <Avatar src={profile?.photos?.large || userImg} sx={{ mr: { xs: 1, sm: 2 }, flexShrink: 0 }} />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <TextSubmitInput
+            text={text}
+            isSubmitting={isSubmitting}
+            handleSubmit={handleSubmit}
+            onChange={setText}
+            photo={selectedPhoto}
+            sxInput={sx.addPostInput}
+            placeholder={`What's new with you, ${profile?.fullName}?`}
+          />
+        </Box>
       </Box>
       <CreatePostActions
         selectedPhoto={selectedPhoto}

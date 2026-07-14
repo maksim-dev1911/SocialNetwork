@@ -51,7 +51,7 @@ const PostLayout: React.FC<PropsType> = ({
           />
         </Box>
       </Box>
-      <Box sx={{ padding: '0 16px 16px 16px' }}>{post.text}</Box>
+      <Box sx={{ padding: '0 16px 16px 16px', wordBreak: 'break-word' }}>{post.text}</Box>
       {post.photo && (
         <Box
           sx={{

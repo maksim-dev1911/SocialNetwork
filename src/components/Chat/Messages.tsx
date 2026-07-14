@@ -11,7 +11,14 @@ type PropsType = {
 
 const Messages: React.FC<PropsType> = ({ usersMessages, messagesEndRef }) => {
   return (
-    <Box sx={{ borderRadius: '10px', overflowY: 'auto', height: '580px' }}>
+    <Box
+      sx={{
+        borderRadius: '10px',
+        overflowY: 'auto',
+        height: { xs: 'min(580px, calc(100vh - 280px))', sm: 'min(580px, calc(100vh - 240px))' },
+        minHeight: 240,
+      }}
+    >
       {usersMessages.map((u, index) => {
         const isGrouped = usersMessages[index - 1]?.userId === u.userId;
 

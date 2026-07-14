@@ -32,9 +32,15 @@ const LoginForm: React.FC<PropsType> = ({
   captchaUrl,
 }) => {
   return (
-    <Stack>
+    <Stack
+      minHeight="100vh"
+      justifyContent={{ xs: 'center', sm: 'flex-start' }}
+      alignItems="center"
+      position="relative"
+      sx={{ bgcolor: { xs: '#f3f4f6', sm: 'transparent' } }}
+    >
       <BackgroundImage>
-        <img src={authBackground} />
+        <img src={authBackground} alt="" />
       </BackgroundImage>
       <Stack sx={sx.wrapper}>
         <Typography fontSize="24px">{title}</Typography>

@@ -46,8 +46,10 @@ const Message: React.FC<PropsType> = ({ userMessage, isGrouped }) => {
 
             borderRadius: '16px',
 
-            maxWidth: '550px',
+            maxWidth: { xs: '100%', sm: '550px' },
             width: 'fit-content',
+            boxSizing: 'border-box',
+            wordBreak: 'break-word',
 
             boxShadow: '0 1px 3px rgba(0,0,0,.05)',
 

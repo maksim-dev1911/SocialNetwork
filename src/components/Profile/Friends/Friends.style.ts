@@ -15,11 +15,11 @@ export const sx: StylesRecord = {
   }),
   userName: () => ({}),
   gridContainer: () => ({
-    gap: 5,
+    gap: { xs: 2, sm: 5 },
     display: 'flex',
     justifyContent: 'center',
-    mb: 8,
-    mt: 8,
+    mb: { xs: 4, sm: 8 },
+    mt: { xs: 4, sm: 8 },
   }),
 };
 export default sx;

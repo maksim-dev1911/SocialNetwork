@@ -29,7 +29,13 @@ type PropsType = {
   currentUser: IUser | null;
 };
 
-const UserProfile: React.FC<PropsType> = ({ profile, isMobile, totalFriendsCount, currentUser, totalPostsCount }) => {
+const UserProfile: React.FC<PropsType> = ({
+  profile,
+  isMobile,
+  totalFriendsCount,
+  currentUser,
+  totalPostsCount,
+}) => {
   const linkItem = [
     {
       icon: InstagramIcon,
@@ -67,20 +73,27 @@ const UserProfile: React.FC<PropsType> = ({ profile, isMobile, totalFriendsCount
     <Box sx={sx.wrapper}>
       <Box sx={{ position: 'relative' }}>
         <Banner>
-          <img src={profileCoverImg} />
+          <img src={profileCoverImg} alt="profile cover" />
           <Avatar>
-            <img src={profile?.photos?.large || userImg} />
+            <img src={profile?.photos?.large || userImg} alt="avatar" />
           </Avatar>
         </Banner>
-        <Box sx={{ position: 'absolute', right: 0, bottom: 0 }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            right: { xs: 4, sm: 0 },
+            bottom: 0,
+            maxWidth: { xs: '55%', sm: '100%' },
+          }}
+        >
           <List sx={isMobile ? sx.mobileContainer : sx.desktopContainer}>
             {filtered.map((link) => {
               return (
-                <ListItem disablePadding>
+                <ListItem key={link.path} disablePadding sx={{ width: 'auto' }}>
                   <LinkUI href={link.path} sx={{ textDecoration: 'none' }}>
                     <ListItemButton sx={{ p: 0 }}>
                       <ListItemIcon sx={isMobile ? sx.mobileIcon : sx.desktopIcon}>
-                        <link.icon fontSize='medium' sx={{ color: '#fff' }} />
+                        <link.icon fontSize="medium" sx={{ color: '#fff' }} />
                       </ListItemIcon>
                     </ListItemButton>
                   </LinkUI>
@@ -90,19 +103,43 @@ const UserProfile: React.FC<PropsType> = ({ profile, isMobile, totalFriendsCount
           </List>
         </Box>
       </Box>
-      <Box display='flex' justifyContent='center' alignItems='center' position='relative' width='100%' mt={10}>
-        <Box display='flex' flexDirection='column' alignItems='center'>
+      <Box
+        display="flex"
+        flexDirection={{ xs: 'column', sm: 'row' }}
+        justifyContent="center"
+        alignItems="center"
+        position="relative"
+        width="100%"
+        mt={{ xs: 7, sm: 10 }}
+        gap={{ xs: 2, sm: 0 }}
+        px={{ xs: 2, sm: 0 }}
+      >
+        <Box display="flex" flexDirection="column" alignItems="center">
           <Typography sx={sx.userName}>{profile?.fullName}</Typography>
-          <Typography fontSize='13px' color='#89919E'>{currentUser?.email}</Typography>
+          <Typography fontSize="13px" color="#89919E">
+            {currentUser?.email}
+          </Typography>
         </Box>
-        <Box position='absolute' right='20px' alignItems='center'>
-          <Link to='/settings'>
-            <Button startIcon={<ManageAccountsIcon />} color='info' variant='outlined' size='small'>EDIT
-              PROFILE</Button>
+        <Box
+          sx={{
+            position: { xs: 'static', sm: 'absolute' },
+            right: { sm: '20px' },
+            alignItems: 'center',
+          }}
+        >
+          <Link to="/settings">
+            <Button
+              startIcon={<ManageAccountsIcon />}
+              color="info"
+              variant="outlined"
+              size="small"
+            >
+              EDIT PROFILE
+            </Button>
           </Link>
         </Box>
       </Box>
-      <StatsBar totalFriendsCount={totalFriendsCount} totalPostsCount={totalPostsCount}/>
+      <StatsBar totalFriendsCount={totalFriendsCount} totalPostsCount={totalPostsCount} />
     </Box>
   );
 };

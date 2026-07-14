@@ -42,7 +42,7 @@ const User: React.FC<PropsType> = ({ user, follow, unfollow, isLoading, isSm }) 
           </Typography>
         </Box>
       </Box>
-      <div>
+      <div style={{ width: isSm ? '100%' : 'auto' }}>
         {user.followed ? (
           <LoadingButton
             loading={isLoading.some((id) => id === user.id)}

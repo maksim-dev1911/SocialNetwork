@@ -6,9 +6,11 @@ export const sx: StylesRecord = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    px: 4,
+    px: { xs: 2, sm: 4 },
     py: 3,
     borderBottom: '1px solid #F1F5F9',
+    gap: 2,
+    flexWrap: 'wrap',
 
     '&:hover': {
       backgroundColor: '#FAFBFF',
@@ -17,22 +19,30 @@ export const sx: StylesRecord = {
   wrapperMobile: () => ({
     borderRadius: '5px',
     backgroundColor: '#F8F9FA',
-    p: 4,
+    p: { xs: 2, sm: 4 },
     textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 1.5,
   }),
   userWrapper: () => ({
     display: 'flex',
+    minWidth: 0,
+    flex: 1,
   }),
   userInfo: () => ({
     ml: 2,
     mt: 3,
+    minWidth: 0,
   }),
   userInfoMobile: () => ({
     mb: 1,
     mt: 2,
   }),
   buttonStyle: () => ({
-    minWidth: 160,
+    minWidth: { xs: '100%', sm: 160 },
+    width: { xs: '100%', sm: 'auto' },
     height: 44,
     borderRadius: '12px',
     borderColor: '#D9D6FE',

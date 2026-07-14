@@ -15,7 +15,7 @@ type PropsType = {
 
 const SendMessageForm: React.FC<PropsType> = ({ onSubmit }) => {
   return (
-    <Stack mt={5}>
+    <Stack mt={{ xs: 2, sm: 5 }}>
       <Form<FormValues>
         onSubmit={(values, form) => {
           onSubmit(values);
@@ -47,9 +47,6 @@ const SendMessageForm: React.FC<PropsType> = ({ onSubmit }) => {
                   placeholder="Введите сообщение..."
                   name="message"
                   type="text"
-                  InputProps={{
-                    disableUnderline: true,
-                  }}
                   sx={{
                     px: 1,
 

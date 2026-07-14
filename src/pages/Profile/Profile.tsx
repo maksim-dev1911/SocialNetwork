@@ -28,7 +28,7 @@ import {
 } from '../../store/profile/profile.thunks';
 import { useParams } from 'react-router-dom';
 import Preloader from '../../components/Common/Preloader/Preloader';
-import { Grid, Theme, useMediaQuery } from '@mui/material';
+import { Theme, useMediaQuery } from '@mui/material';
 import Tabs from '../../components/Common/Tabs/Tabs';
 import Friends from '../../components/Profile/Friends/Friends';
 import TimeLine from '../../components/Profile/TimeLine/TimeLine';
@@ -182,8 +182,8 @@ const Profile = () => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-beetwen">
-      <Box width="100%">
+    <Box display="flex" justifyContent="space-between" gap={{ xs: 0, md: 3 }} sx={{ minWidth: 0 }}>
+      <Box width="100%" minWidth={0}>
         <UserProfile
           currentUser={currentUser}
           isMobile={isMobile}
@@ -224,15 +224,20 @@ const Profile = () => {
           )}
         </Box>
       </Box>
-      {!isSm && (
-        <Grid item sm={4} md={5} width="500px">
+      {!isMobile && (
+        <Box
+          sx={{
+            width: { md: 320, lg: 360 },
+            flexShrink: 0,
+          }}
+        >
           <About profile={profile} />
           <FriendsCard
             userFriends={userFriends}
             totalUsersCount={totalUsersCount}
             onClickToTabFriends={onClickToTabFriends}
           />
-        </Grid>
+        </Box>
       )}
     </Box>
   );

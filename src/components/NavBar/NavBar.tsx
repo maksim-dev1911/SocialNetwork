@@ -13,9 +13,10 @@ import List from '@mui/material/List';
 type PropsType = {
   userId?: number;
   variant?: 'default' | 'small';
+  onNavigate?: () => void;
 };
 
-const NavBar: React.FC<PropsType> = ({ userId }) => {
+const NavBar: React.FC<PropsType> = ({ userId, onNavigate }) => {
   const linkItem = [
     {
       title: 'Profile',
@@ -38,17 +39,17 @@ const NavBar: React.FC<PropsType> = ({ userId }) => {
     <div>
       <List sx={{ p: 0 }}>
         {linkItem.map((link) => (
-          <ListItem key={link.title} disablePadding sx={{ display: 'block', mb: '3px'}}>
-            <Link sx={{ textDecoration: 'none' }} key={link.title} to={link.path}>
+          <ListItem key={link.title} disablePadding sx={{ display: 'block', mb: '3px' }}>
+            <Link sx={{ textDecoration: 'none' }} key={link.title} to={link.path} onClick={onNavigate}>
               {({ isActive }) => (
                 <ListItemButton sx={isActive ? sx.buttonActive : sx.button}>
-                  <ListItemIcon sx={{ minWidth: '18px', mr: 3, ml: 0.5,  p: '8px 0'}}>
-                    <link.icon fontSize='medium' color={isActive ? 'primary' : undefined} />
+                  <ListItemIcon sx={{ minWidth: '18px', mr: 3, ml: 0.5, p: '8px 0' }}>
+                    <link.icon fontSize="medium" color={isActive ? 'primary' : undefined} />
                   </ListItemIcon>
                   <Typography
-                    fontFamily='Inter'
+                    fontFamily="Inter"
                     color={isActive ? '' : '#5F6B85'}
-                    variant='body2'
+                    variant="body2"
                   >
                     {link.title}
                   </Typography>

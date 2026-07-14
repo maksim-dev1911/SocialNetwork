@@ -63,7 +63,7 @@ const Comment: React.FC<PropsType> = ({
       </Box>
       {!isEditMode && (
         <Box mt={2}>
-          <Typography fontSize="15px" color="#374151">
+          <Typography fontSize="15px" color="#374151" sx={{ wordBreak: 'break-word' }}>
             {comment.commentText}
           </Typography>
         </Box>

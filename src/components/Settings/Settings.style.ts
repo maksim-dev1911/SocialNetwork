@@ -31,7 +31,8 @@ const sx: StylesRecord = {
         bottom: 0,
     }),
     fieldStyle: () => ({
-        width: '500px'
+        width: '100%',
+        maxWidth: 500,
     })
 }
 

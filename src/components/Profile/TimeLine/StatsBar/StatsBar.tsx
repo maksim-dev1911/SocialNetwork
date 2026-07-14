@@ -17,9 +17,17 @@ const StatsBar: React.FC<PropsType> = ({ totalFriendsCount, totalPostsCount }) =
   ];
 
   return (
-    <Box display="flex" gap={4} ml={3} mt={4}>
+    <Box
+      display="flex"
+      justifyContent={{ xs: 'center', sm: 'flex-start' }}
+      gap={{ xs: 2, sm: 4 }}
+      ml={{ xs: 0, sm: 3 }}
+      mt={4}
+      flexWrap="wrap"
+      px={{ xs: 2, sm: 0 }}
+    >
       {statsBarItems.map((item, index) => (
-        <Box display="flex" gap={4} textAlign="center" key={index}>
+        <Box display="flex" gap={{ xs: 2, sm: 4 }} textAlign="center" key={index}>
           <div>
             <Typography fontSize="14px" fontWeight={600}>
               {item.item}

@@ -35,8 +35,8 @@ const BaseLayout = () => {
     dispatch(getCurrentUserProfile(userId));
   }, [userId]);
 
-  const handleOpen = useCallback(() => {
-    setOpen(true);
+  const handleToggleDrawer = useCallback(() => {
+    setOpen((prev) => !prev);
   }, []);
 
   const handleClose = useCallback(() => {
@@ -60,7 +60,8 @@ const BaseLayout = () => {
           openModal={openModal}
           currentUserProfile={currentUserProfile}
           open={open}
-          setOpen={handleOpen}
+          setOpen={handleToggleDrawer}
+          isMobile={isMobile}
         />
         <SideBar
           isMobile={isMobile}
@@ -72,7 +73,6 @@ const BaseLayout = () => {
         />
         {renderModal()}
         <Box sx={sx.content}>
-          <Box sx={sx.dots} />
           <Box sx={sx.container}>
             <Outlet />
           </Box>

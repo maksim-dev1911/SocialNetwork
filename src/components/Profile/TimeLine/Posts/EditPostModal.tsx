@@ -61,24 +61,25 @@ export const EditPostModal: React.FC<PropsType> = ({
   };
 
   return (
-    <Modal open={open} onClose={() => onClose}>
+    <Modal open={open} onClose={() => onClose({ editMode: false })}>
       <Box
         sx={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: 900,
+          width: { xs: 'calc(100% - 24px)', md: 900 },
+          maxHeight: '90vh',
           bgcolor: '#fff',
           borderRadius: 4,
           boxShadow: '0 20px 50px rgba(0,0,0,.15)',
-          overflow: 'hidden',
+          overflow: 'auto',
         }}
       >
-        <Box display="flex">
-          <Box flex={1} p={4}>
+        <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }}>
+          <Box flex={1} p={{ xs: 2, sm: 4 }} minWidth={0}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-              <Typography variant="h5" fontWeight={700}>
+              <Typography variant="h5" fontWeight={700} fontSize={{ xs: 20, sm: 24 }}>
                 Edit post
               </Typography>
 
@@ -113,12 +114,15 @@ export const EditPostModal: React.FC<PropsType> = ({
 
           <Box
             sx={{
-              width: 400,
+              width: { xs: '100%', md: 400 },
+              flexShrink: 0,
               bgcolor: '#f8fafc',
-              borderLeft: '1px solid #e5e7eb',
+              borderLeft: { xs: 'none', md: '1px solid #e5e7eb' },
+              borderTop: { xs: '1px solid #e5e7eb', md: 'none' },
               p: 2,
               display: 'flex',
               flexDirection: 'column',
+              maxHeight: { xs: 360, md: 'none' },
             }}
           >
             <Typography fontWeight={600} mb={2}>
@@ -237,8 +241,13 @@ export const EditPostModal: React.FC<PropsType> = ({
 
         <Divider />
 
-        <Stack direction="row" justifyContent="flex-end" spacing={2} p={3}>
-          <Button variant="outlined" onClick={() => onClose({ editMode: false })}>
+        <Stack
+          direction={{ xs: 'column-reverse', sm: 'row' }}
+          justifyContent="flex-end"
+          spacing={2}
+          p={{ xs: 2, sm: 3 }}
+        >
+          <Button variant="outlined" fullWidth={false} onClick={() => onClose({ editMode: false })}>
             Cancel
           </Button>
 
