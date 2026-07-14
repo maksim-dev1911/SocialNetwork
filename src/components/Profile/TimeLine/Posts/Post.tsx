@@ -1,121 +1,90 @@
-import React, { useCallback, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
-import { PostType } from './Posts';
-import { ImageList } from '../TimeLine.style';
-import DropDown from '../../../Common/DropDown/DropDown';
-import { CommentType, PostCommentFormData } from '../../../../types/types';
+import { PostFormDataType, PostType } from './Posts';
+import {
+  CommentType,
+  EditModeType,
+  PostCommentFormData,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../../../types/types';
 import Comments from '../Comments/Comments';
-import { getRelativeTime } from '../../../Common/RelativeTime/RelativeTime';
+import { EditPostModal } from './EditPostModal';
+import PostLayout from './PostLayout';
+import sx from '../TimeLine.style';
 
 type PropsType = {
   post: PostType;
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  onCommentCreate: (postId: number, commentText: string) => void;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   deletePost: (postId: number) => void;
+  deleteComment: (postId: number, commentId: number) => void;
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
+  updatePost: (data: UpdatePostPayloadType) => void;
 };
 
 const Post: React.FC<PropsType> = ({
   post,
-  handleSubmitCreateComment,
+  onCommentCreate,
   comments,
   toggleLike,
+  updateComment,
   deletePost,
+  deleteComment,
+  setEditCommentMode,
+  editCommentMode,
+  updatePost,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [editPostMode, setEditPostMode] = useState<EditModeType>({
+    editMode: false,
+    id: 0,
+  });
+  const [newText, setNewText] = useState(post.text);
+  const [newPhoto, setNewPhoto] = useState<File | null>(null);
 
   const toggleIsOpen = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
 
+  if (editPostMode.editMode) {
+    return (
+      <EditPostModal
+        onClose={setEditPostMode}
+        newText={newText}
+        open={editPostMode.editMode}
+        onChange={setNewText}
+        updatePost={updatePost}
+        post={post}
+        newPhoto={newPhoto}
+        setNewPhoto={setNewPhoto}
+        commentsCount={comments[post.id]?.length || 0}
+      />
+    );
+  }
+
   return (
-    <Box
-      mt={2}
-      sx={{
-        bgcolor: '#fff',
-        borderRadius: '24px',
-        border: '1px solid',
-        borderColor: 'rgba(226, 232, 240, 0.6)',
-        boxShadow: '0px 12px 32px rgba(15, 23, 42, 0.06)',
-        padding: '15px',
-      }}
-    >
-      <Box display="flex" p={2}>
-        <Avatar>
-          <img src={post.creatorAvatar} />
-        </Avatar>
-        <Box sx={{ width: '100%' }}>
-          <Typography ml={2} fontSize="15px">
-            {post.creatorFullName}
-          </Typography>
-          <Typography ml={2} fontSize="12px" color="#89919E">
-            {getRelativeTime(post.createdAt)}
-          </Typography>
-        </Box>
-        <Box>
-          <DropDown postId={post.id} deletePost={deletePost} />
-        </Box>
-      </Box>
-      <Box sx={{ padding: '0 16px 16px 16px' }}>{post.text}</Box>
-      {post.photo && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            p: '16px',
-          }}
-        >
-          <Box
-            component="img"
-            src={post.photo}
-            alt=""
-            sx={{
-              width: 'auto',
-              maxWidth: '100%',
-              maxHeight: 700,
-              display: 'block',
-              borderRadius: 3,
-            }}
-          />
-        </Box>
-      )}
-      <Divider />
-      <Box p={2}>
-        <Box display="flex">
-          <Box
-            display="flex"
-            mr={2}
-            sx={{ cursor: 'pointer', '&:hover': { color: '#0056b3' } }}
-            onClick={() => toggleLike(post.id)}
-          >
-            {post.isLiked ? <FavoriteIcon sx={{ color: 'red' }} /> : <FavoriteBorderIcon />}
-            <Typography sx={{ color: '#666666' }} ml={1}>
-              {post.likedCount}
-            </Typography>
-          </Box>
-          <Box
-            display="flex"
-            onClick={toggleIsOpen}
-            sx={{ cursor: 'pointer', '&:hover': { color: '#0056b3' } }}
-          >
-            <SmsOutlinedIcon />
-            <Typography sx={{ color: '#666666' }} ml={1}>
-              {comments[post.id]?.length || 0}
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
+    <Box mt={2} sx={sx.postWrapper}>
+      <PostLayout
+        post={post}
+        setEditPostMode={setEditPostMode}
+        deletePost={deletePost}
+        toggleIsOpen={toggleIsOpen}
+        toggleLike={toggleLike}
+        comments={comments}
+      />
       <Comments
         postId={post.id}
-        handleSubmitCreateComment={handleSubmitCreateComment}
+        onCommentCreate={onCommentCreate}
         isOpen={isOpen}
         comments={comments}
+        updateComment={updateComment}
+        deleteComment={deleteComment}
+        editCommentMode={editCommentMode}
+        setEditCommentMode={setEditCommentMode}
       />
     </Box>
   );

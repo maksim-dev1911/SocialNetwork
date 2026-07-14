@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CommentType, PhotosType, ProfileType, UserType } from '../../types/types';
-import { PostType } from '../../components/Profile/TimeLine/Posts/Posts';
+import { PostFormDataType, PostType } from '../../components/Profile/TimeLine/Posts/Posts';
+import { DataUpdatedPost } from './profile.thunks';
 
 type initialStateType = {
   profile: ProfileType | null;
@@ -25,7 +26,7 @@ const initialState: initialStateType = {
   followingInProgress: [],
   isFetching: false,
   posts: [],
-  comments: JSON.parse(localStorage.getItem('comments') || '{}'),
+  comments: [],
 };
 
 const profileSlice = createSlice({
@@ -67,12 +68,15 @@ const profileSlice = createSlice({
     setIsFetching: (state, action: PayloadAction<boolean>) => {
       state.isFetching = action.payload;
     },
-    setPostComment: (state, action: PayloadAction<{ postId: number; comment: CommentType }>) => {
+    setNewPostComment: (state, action: PayloadAction<{ postId: number; comment: CommentType }>) => {
       if (state.comments[action.payload.postId]) {
         state.comments[action.payload.postId].push(action.payload.comment);
       } else {
         state.comments[action.payload.postId] = [action.payload.comment];
       }
+    },
+    setAllComments: (state, action: PayloadAction<Record<number, CommentType[]>>) => {
+      state.comments = action.payload;
     },
     toggleLike: (state, action: PayloadAction<number>) => {
       const post = state.posts.find((post) => post.id === action.payload);
@@ -102,7 +106,8 @@ export const {
   setTotalUsersCount,
   setCurrentPage,
   setIsFetching,
-  setPostComment,
+  setNewPostComment,
+  setAllComments,
   toggleLike,
   setPosts,
 } = profileSlice.actions;

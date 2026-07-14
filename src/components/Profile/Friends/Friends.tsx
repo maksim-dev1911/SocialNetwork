@@ -37,15 +37,12 @@ const Friends: React.FC<PropsType> = ({
   }
 
   if (isFetching) {
-    return (
-      <Preloader
-        sx={{ alignItems: 'center', position: 'absolute', top: '50%', left: 0, right: 0 }}
-      />
-    );
+    return <Preloader />;
   }
 
   return (
     <Box mt={3}>
+      <Typography fontSize="19px">Friends ({userFriends?.length})</Typography>
       <Grid sx={sx.gridContainer} container>
         {userFriends.map((friend) => (
           <Friend followingInProgress={followingInProgress} unfollow={unfollow} user={friend} />

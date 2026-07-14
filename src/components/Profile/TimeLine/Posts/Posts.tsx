@@ -1,25 +1,37 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import Box from '@mui/material/Box';
-import { CommentType, PostCommentFormData, ProfileType } from '../../../../types/types';
+import {
+  CommentType,
+  EditModeType,
+  PostCommentFormData,
+  ProfileType,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../../../types/types';
 import Post from './Post';
 import Typography from '@mui/material/Typography';
-import CreatePostCard from '../CreatePostCard/CreatePostCard';
+import CreatePostCard from './CreatePostCard/CreatePostCard';
 
 type PropsType = {
   profile: ProfileType | null;
-  handleSubmitCreatePost: (data: PostFormDataType) => void;
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  onPostCreate: (data: PostFormDataType) => void;
+  onCommentCreate: (postId: number, commentText: string) => void;
   posts: Array<PostType>;
   comments: Record<number, CommentType[]>;
   toggleLike: (postId: number) => void;
+  updateComment: (data: UpdateCommentPayloadType) => void;
   deletePost: (postId: number) => void;
+  deleteComment: (postId: number, commentId: number) => void;
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
+  updatePost: (data: UpdatePostPayloadType) => void;
 };
 
 export type PostType = {
   creatorAvatar?: string;
   creatorFullName: string;
   text: string;
-  photo?: string;
+  photo?: string | null;
   id: number;
   createdAt: number;
   isLiked: boolean;
@@ -28,38 +40,50 @@ export type PostType = {
 
 export interface PostFormDataType {
   text: string;
-  photo: File;
+  photo: File | null;
 }
 
 const Posts: React.FC<PropsType> = ({
   profile,
   posts,
-  handleSubmitCreatePost,
-  handleSubmitCreateComment,
+  onPostCreate,
+  onCommentCreate,
   comments,
   toggleLike,
   deletePost,
+  deleteComment,
+  setEditCommentMode,
+  editCommentMode,
+  updateComment,
+  updatePost,
 }) => {
   return (
     <Box width="100%">
-      <CreatePostCard handleSubmitCreatePost={handleSubmitCreatePost} profile={profile} />
-      {!posts.length && (
-        <Typography mt={8} textAlign="center" fontSize="20px" color="#8C8C8C">
-          Make your first publication
-        </Typography>
-      )}
-      {posts.map((post) => {
-        return (
-          <Post
-            key={post.id}
-            handleSubmitCreateComment={handleSubmitCreateComment}
-            post={post}
-            comments={comments}
-            toggleLike={toggleLike}
-            deletePost={deletePost}
-          />
-        );
-      })}
+      <Box>
+        <CreatePostCard onPostCreate={onPostCreate} profile={profile} />
+        {!posts.length && (
+          <Typography mt={8} textAlign="center" fontSize="20px" color="#8C8C8C">
+            Make your first publication
+          </Typography>
+        )}
+        {posts.map((post) => {
+          return (
+            <Post
+              key={post.id}
+              onCommentCreate={onCommentCreate}
+              post={post}
+              comments={comments}
+              toggleLike={toggleLike}
+              updateComment={updateComment}
+              updatePost={updatePost}
+              deletePost={deletePost}
+              deleteComment={deleteComment}
+              editCommentMode={editCommentMode}
+              setEditCommentMode={setEditCommentMode}
+            />
+          );
+        })}
+      </Box>
     </Box>
   );
 };

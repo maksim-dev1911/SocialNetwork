@@ -32,7 +32,6 @@ const People = () => {
     dispatch(follow(id));
   };
 
-
   const handleUnfollow = (id: number) => {
     dispatch(unfollow(id));
   };
@@ -46,27 +45,21 @@ const People = () => {
   };
 
   if (isFetching) {
-    return (
-      <Preloader
-        sx={{ alignItems: 'center', position: 'absolute', top: '50%', left: 0, right: 0 }}
-      />
-    );
+    return <Preloader />;
   }
 
   return (
-    <div>
-      <Users
-        pageChanged={handlePageChanged}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        users={users}
-        totalUsersCount={totalUsersCount}
-        follow={handleFollow}
-        unfollow={handleUnfollow}
-        isLoading={isLoading}
-        isSm={isSm}
-      />
-    </div>
+    <Users
+      pageChanged={handlePageChanged}
+      currentPage={currentPage}
+      pageSize={pageSize}
+      users={users}
+      totalUsersCount={totalUsersCount}
+      follow={handleFollow}
+      unfollow={handleUnfollow}
+      isLoading={isLoading}
+      isSm={isSm}
+    />
   );
 };
 

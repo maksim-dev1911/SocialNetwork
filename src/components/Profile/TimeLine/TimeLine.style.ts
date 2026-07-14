@@ -42,6 +42,22 @@ const sx: StylesRecord = {
       border: '1px solid rgba(15,23,42,.06)',
     },
   }),
+  loadingButton: () => ({
+    borderRadius: '999px',
+    px: 3,
+    minWidth: 100,
+    textTransform: 'none',
+    fontWeight: 600,
+    boxShadow: 'none',
+  }),
+  postWrapper: () => ({
+    bgcolor: '#fff',
+    borderRadius: '24px',
+    border: '1px solid',
+    borderColor: 'rgba(226, 232, 240, 0.6)',
+    boxShadow: '0px 12px 32px rgba(15, 23, 42, 0.06)',
+    padding: '15px',
+  }),
 };
 
 export default sx;

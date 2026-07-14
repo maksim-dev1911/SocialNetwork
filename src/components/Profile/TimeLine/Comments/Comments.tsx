@@ -1,59 +1,72 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import { Form } from 'react-final-form';
-import { CommentType, PostCommentFormData } from '../../../../types/types';
-import TextFieldControlled from '../../../Fields/TextFieldControlled/TextFieldControlled';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { CommentType, EditModeType, UpdateCommentPayloadType } from '../../../../types/types';
 import Comment from './Comment';
+import TextSubmitInput from '../../../Fields/SubmitInputField/TextSubmitInput';
 
 type PropsType = {
   postId: number;
-  isOpen: boolean
-  handleSubmitCreateComment: (postId: number, data: PostCommentFormData) => void;
+  isOpen: boolean;
+  onCommentCreate: (postId: number, text: string) => void;
   comments: Record<number, CommentType[]>;
-}
+  updateComment: (data: UpdateCommentPayloadType) => void;
+  deleteComment: (postId: number, commentId: number) => void;
+  setEditCommentMode: Dispatch<SetStateAction<EditModeType>>;
+  editCommentMode: EditModeType;
+};
 
-const Comments: React.FC<PropsType> = ({ isOpen, handleSubmitCreateComment, postId, comments }) => {
+const Comments: React.FC<PropsType> = ({
+  isOpen,
+  onCommentCreate,
+  postId,
+  comments,
+  deleteComment,
+  setEditCommentMode,
+  editCommentMode,
+  updateComment,
+}) => {
+  const [commentText, setCommentText] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    onCommentCreate(postId, commentText);
+
+    setCommentText('');
+    setIsSubmitting(false);
+  };
+
   return (
     <Box>
       {isOpen && <Divider />}
       {isOpen && (
         <Box p={1}>
-          {comments[postId]?.length && comments[postId].map((comment: CommentType) => (
-            <Comment comment={comment} key={comment.id} />
-          ))}
-          <Box p={1}>
-            <Form
-              onSubmit={(data: PostCommentFormData) => handleSubmitCreateComment(postId, data)}
-              render={({ handleSubmit, submitting }) => {
-                return (
-                  <form onSubmit={handleSubmit}>
-                    <Box display='flex'>
-                      <TextFieldControlled
-                        type='input'
-                        name='text'
-                        size='small'
-                        sx={{ width: '100%', '& .MuiInputBase-root': { borderRadius: '20px' } }}
-                        placeholder='Add your Comments..'
-                      />
-                      <LoadingButton
-                        disabled={submitting}
-                        loading={submitting}
-                        variant='contained'
-                        size='small'
-                        type='submit'
-                        sx={{ ml: 2 }}
-                      >
-                        Share
-                      </LoadingButton>
-                    </Box>
-                  </form>
-                );
-              }}
-            />
-          </Box>
+          {comments[postId] &&
+            comments[postId].map((comment: CommentType) => (
+              <Comment
+                comment={comment}
+                key={comment.id}
+                postId={postId}
+                updateComment={updateComment}
+                deleteComment={deleteComment}
+                editCommentMode={editCommentMode}
+                setEditCommentMode={setEditCommentMode}
+              />
+            ))}
+          {!editCommentMode.editMode && (
+            <Box p={1}>
+              <TextSubmitInput
+                text={commentText}
+                isSubmitting={isSubmitting}
+                handleSubmit={handleSubmit}
+                onChange={setCommentText}
+                sxInput={{ width: '100%', '& .MuiInputBase-root': { borderRadius: '20px' } }}
+                placeholder="Add your Comments.."
+              />
+            </Box>
+          )}
         </Box>
       )}
     </Box>

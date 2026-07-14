@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { UserType } from '../../../types/types';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Link from '../../Common/Link/Link';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 
 type PropsType = {
   user: UserType;
@@ -26,37 +27,45 @@ const User: React.FC<PropsType> = ({ user, follow, unfollow, isLoading, isSm }) 
         </Avatar>
         <Box sx={!isSm ? sx.userInfo : sx.userInfoMobile}>
           <Link to={'/profile/' + user.id} sx={{ textDecoration: 'none' }}>
-            <Typography color="black" variant="h6">
+            <Typography
+              variant="body1"
+              fontSize="19px"
+              fontWeight={700}
+              color="#111827"
+              lineHeight={1.2}
+            >
               {user.name}
             </Typography>
           </Link>
-          <Typography color="#6F7F92">{user.status}</Typography>
+          <Typography fontSize="15px" fontWeight={400} color="#9CA3AF" lineHeight={1.3}>
+            {user.status}
+          </Typography>
         </Box>
       </Box>
       <div>
         {user.followed ? (
           <LoadingButton
             loading={isLoading.some((id) => id === user.id)}
-            variant="contained"
-            sx={{ color: 'white', fontWeight: 'bold' }}
-            color="error"
+            variant="outlined"
+            startIcon={<PersonRemoveOutlinedIcon />}
+            sx={sx.buttonStyle}
             onClick={() => {
               unfollow(user.id);
             }}
           >
-            Unfollow
+            Remove Friend
           </LoadingButton>
         ) : (
           <LoadingButton
             loading={isLoading.some((id) => id === user.id)}
-            color="success"
-            sx={{ color: 'white', fontWeight: 'bold' }}
-            variant="contained"
+            startIcon={<PersonRemoveOutlinedIcon />}
+            variant="outlined"
+            sx={sx.buttonStyle}
             onClick={() => {
               follow(user.id);
             }}
           >
-            Follow
+            Add friend
           </LoadingButton>
         )}
       </div>

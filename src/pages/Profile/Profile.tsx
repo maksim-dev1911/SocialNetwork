@@ -16,10 +16,15 @@ import {
 import {
   createComment,
   createPost,
+  deleteComment,
   deletePost,
+  getComments,
+  getPostsThunk,
   getUserFriends,
   getUserProfile,
   unfollow,
+  updateCommentThunk,
+  updatePostThunk,
 } from '../../store/profile/profile.thunks';
 import { useParams } from 'react-router-dom';
 import Preloader from '../../components/Common/Preloader/Preloader';
@@ -28,7 +33,12 @@ import Tabs from '../../components/Common/Tabs/Tabs';
 import Friends from '../../components/Profile/Friends/Friends';
 import TimeLine from '../../components/Profile/TimeLine/TimeLine';
 import { PostFormDataType } from '../../components/Profile/TimeLine/Posts/Posts';
-import { PostCommentFormData } from '../../types/types';
+import {
+  EditModeType,
+  PostCommentFormData,
+  UpdateCommentPayloadType,
+  UpdatePostPayloadType,
+} from '../../types/types';
 import About from '../../components/Profile/TimeLine/About/About';
 import FriendsCard from '../../components/Profile/TimeLine/FriendsCard/FriendsCard';
 import { toggleLike } from '../../store/profile/profileSlice';
@@ -60,6 +70,10 @@ const Profile = () => {
   const currentUser = useAppSelector(currentUserSelector);
 
   const [tab, setTab] = useState<TabsType>('timeline');
+  const [editCommentMode, setEditCommentMode] = useState<EditModeType>({
+    editMode: false,
+    id: 0,
+  });
 
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'));
@@ -71,21 +85,25 @@ const Profile = () => {
   }
 
   useEffect(() => {
+    dispatch(getPostsThunk());
+    dispatch(getComments());
     dispatch(getUserProfile(userId));
     onPageChanged(currentPage);
   }, [userId, dispatch, currentPage]);
 
-  const onPageChanged = (currentPage: number) => {
-    dispatch(getUserFriends({ currentPage, pageSize }));
-  };
+  const onPageChanged = useCallback(
+    (currentPage: number) => {
+      dispatch(getUserFriends({ currentPage, pageSize }));
+    },
+    [dispatch, pageSize]
+  );
 
-  const handleToggleLike = (postId: number) => {
-    dispatch(toggleLike(postId));
-  };
-
-  const handleDeletePost = (postId: number) => {
-    dispatch(deletePost(postId));
-  };
+  const handleToggleLike = useCallback(
+    (postId: number) => {
+      dispatch(toggleLike(postId));
+    },
+    [dispatch]
+  );
 
   const handlePageChanged = (_: any, page: number) => {
     onPageChanged(page);
@@ -95,9 +113,12 @@ const Profile = () => {
     setTab(value as TabsType);
   }, []);
 
-  const handleUnfollow = useCallback((id: number) => {
-    dispatch(unfollow(id));
-  }, []);
+  const handleUnfollow = useCallback(
+    (id: number) => {
+      dispatch(unfollow(id));
+    },
+    [dispatch]
+  );
 
   const handleSubmitCreatePost = useCallback(
     async (data: PostFormDataType) => {
@@ -106,11 +127,40 @@ const Profile = () => {
     [dispatch]
   );
 
-  const handleSubmitCreateComment = useCallback(
-    async (postId: number, data: PostCommentFormData) => {
-      dispatch(createComment({ postId, formData: data }));
+  const updatePost = useCallback(
+    async (data: UpdatePostPayloadType) => {
+      dispatch(updatePostThunk(data));
     },
-    []
+    [dispatch]
+  );
+
+  const handleDeletePost = useCallback(
+    (postId: number) => {
+      dispatch(deletePost(postId));
+    },
+    [dispatch]
+  );
+
+  const handleSubmitCreateComment = useCallback(
+    async (postId: number, commentText: string) => {
+      dispatch(createComment({ postId, commentText }));
+    },
+    [dispatch]
+  );
+
+  const updateComment = useCallback(
+    (data: UpdateCommentPayloadType) => {
+      dispatch(updateCommentThunk(data));
+      setEditCommentMode({ editMode: false, id: data.commentId });
+    },
+    [dispatch]
+  );
+
+  const handleDeleteComment = useCallback(
+    (postId: number, commentId: number) => {
+      dispatch(deleteComment({ postId, commentId }));
+    },
+    [dispatch]
   );
 
   const onClickToTabFriends = () => {
@@ -121,12 +171,6 @@ const Profile = () => {
     <Tabs
       indicatorColor="primary"
       textColor="primary"
-      sx={{
-        backgroundColor: 'white',
-        border: '1px solid',
-        borderColor: 'rgba(226, 232, 240, 0.6)',
-        boxShadow: '0px 12px 32px rgba(15, 23, 42, 0.06)',
-      }}
       tabs={tabs}
       value={tab}
       onChange={handleTabChange}
@@ -134,11 +178,7 @@ const Profile = () => {
   );
 
   if (!profile) {
-    return (
-      <Preloader
-        sx={{ alignItems: 'center', position: 'absolute', top: '50%', left: 0, right: 0 }}
-      />
-    );
+    return <Preloader />;
   }
 
   return (
@@ -157,12 +197,17 @@ const Profile = () => {
             <TimeLine
               posts={posts}
               toggleLike={handleToggleLike}
-              handleSubmitCreatePost={handleSubmitCreatePost}
-              handleSubmitCreateComment={handleSubmitCreateComment}
+              onPostCreate={handleSubmitCreatePost}
+              onCommentCreate={handleSubmitCreateComment}
               profile={profile}
               isSm={isSm}
               comments={comments}
+              updateComment={updateComment}
+              editCommentMode={editCommentMode}
+              setEditCommentMode={setEditCommentMode}
+              deleteComment={handleDeleteComment}
               deletePost={handleDeletePost}
+              updatePost={updatePost}
             />
           )}
           {tab === 'friends' && (
