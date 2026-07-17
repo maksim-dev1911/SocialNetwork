@@ -33,12 +33,7 @@ import Tabs from '../../components/Common/Tabs/Tabs';
 import Friends from '../../components/Profile/Friends/Friends';
 import TimeLine from '../../components/Profile/TimeLine/TimeLine';
 import { PostFormDataType } from '../../components/Profile/TimeLine/Posts/Posts';
-import {
-  EditModeType,
-  PostCommentFormData,
-  UpdateCommentPayloadType,
-  UpdatePostPayloadType,
-} from '../../types/types';
+import { EditModeType, UpdateCommentPayloadType, UpdatePostPayloadType } from '../../types/types';
 import About from '../../components/Profile/TimeLine/About/About';
 import FriendsCard from '../../components/Profile/TimeLine/FriendsCard/FriendsCard';
 import { toggleLike } from '../../store/profile/profileSlice';
@@ -84,19 +79,19 @@ const Profile = () => {
     userId = '22912';
   }
 
-  useEffect(() => {
-    dispatch(getPostsThunk());
-    dispatch(getComments());
-    dispatch(getUserProfile(userId));
-    onPageChanged(currentPage);
-  }, [userId, dispatch, currentPage]);
-
   const onPageChanged = useCallback(
     (currentPage: number) => {
       dispatch(getUserFriends({ currentPage, pageSize }));
     },
     [dispatch, pageSize]
   );
+
+  useEffect(() => {
+    dispatch(getPostsThunk());
+    dispatch(getComments());
+    dispatch(getUserProfile(userId));
+    onPageChanged(currentPage);
+  }, [userId, dispatch, currentPage, onPageChanged]);
 
   const handleToggleLike = useCallback(
     (postId: number) => {
@@ -227,8 +222,9 @@ const Profile = () => {
       {!isMobile && (
         <Box
           sx={{
-            width: { md: 320, lg: 360 },
+            width: { md: 300, lg: 340 },
             flexShrink: 0,
+            pt: 0.5,
           }}
         >
           <About profile={profile} />

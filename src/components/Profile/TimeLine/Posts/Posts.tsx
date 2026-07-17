@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import {
   CommentType,
   EditModeType,
-  PostCommentFormData,
   ProfileType,
   UpdateCommentPayloadType,
   UpdatePostPayloadType,
@@ -11,6 +10,8 @@ import {
 import Post from './Post';
 import Typography from '@mui/material/Typography';
 import CreatePostCard from './CreatePostCard/CreatePostCard';
+import sx from '../TimeLine.style';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 
 type PropsType = {
   profile: ProfileType | null;
@@ -58,32 +59,50 @@ const Posts: React.FC<PropsType> = ({
   updatePost,
 }) => {
   return (
-    <Box width="100%">
-      <Box>
-        <CreatePostCard onPostCreate={onPostCreate} profile={profile} />
-        {!posts.length && (
-          <Typography mt={8} textAlign="center" fontSize="20px" color="#8C8C8C">
-            Make your first publication
+    <Box sx={sx.feed}>
+      <CreatePostCard onPostCreate={onPostCreate} profile={profile} />
+
+      {!posts.length && (
+        <Box sx={sx.empty}>
+          <Box
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: '20px',
+              display: 'grid',
+              placeItems: 'center',
+              bgcolor: 'rgba(88, 80, 236, 0.1)',
+              color: 'primary.main',
+              mx: 'auto',
+              mb: 2,
+            }}
+          >
+            <ArticleOutlinedIcon fontSize="large" />
+          </Box>
+          <Typography fontWeight={800} fontSize={18} color="text.primary" mb={0.75}>
+            No posts yet
           </Typography>
-        )}
-        {posts.map((post) => {
-          return (
-            <Post
-              key={post.id}
-              onCommentCreate={onCommentCreate}
-              post={post}
-              comments={comments}
-              toggleLike={toggleLike}
-              updateComment={updateComment}
-              updatePost={updatePost}
-              deletePost={deletePost}
-              deleteComment={deleteComment}
-              editCommentMode={editCommentMode}
-              setEditCommentMode={setEditCommentMode}
-            />
-          );
-        })}
-      </Box>
+          <Typography fontSize={14} color="text.secondary" maxWidth={320} mx="auto">
+            Share your first update with the community.
+          </Typography>
+        </Box>
+      )}
+
+      {posts.map((post) => (
+        <Post
+          key={post.id}
+          onCommentCreate={onCommentCreate}
+          post={post}
+          comments={comments}
+          toggleLike={toggleLike}
+          updateComment={updateComment}
+          updatePost={updatePost}
+          deletePost={deletePost}
+          deleteComment={deleteComment}
+          editCommentMode={editCommentMode}
+          setEditCommentMode={setEditCommentMode}
+        />
+      ))}
     </Box>
   );
 };

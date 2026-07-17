@@ -1,10 +1,9 @@
-import React, { Dispatch, SetStateAction, useCallback, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
-import { PostFormDataType, PostType } from './Posts';
+import { PostType } from './Posts';
 import {
   CommentType,
   EditModeType,
-  PostCommentFormData,
   UpdateCommentPayloadType,
   UpdatePostPayloadType,
 } from '../../../../types/types';
@@ -67,7 +66,7 @@ const Post: React.FC<PropsType> = ({
   }
 
   return (
-    <Box mt={2} sx={sx.postWrapper}>
+    <Box sx={sx.postWrapper}>
       <PostLayout
         post={post}
         setEditPostMode={setEditPostMode}

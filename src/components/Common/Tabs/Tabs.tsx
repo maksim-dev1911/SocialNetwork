@@ -17,25 +17,24 @@ type PropsType = Omit<TabsProps, 'onChange'> & {
 };
 
 const Tabs: React.FC<PropsType> = ({ value = '', onChange, tabs = [], ...props }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,no-unused-vars
-  const handleChange = (_: any, value: string) => {
+  const handleChange = (_: any, nextValue: string) => {
     if (onChange) {
-      onChange(value);
+      onChange(nextValue);
     }
   };
 
   const getTabProps = (tab: ITab) => {
-    const props: Record<string, any> = {
+    const tabProps: Record<string, any> = {
       label: tab.label,
       value: tab.value,
     };
 
     if (tab.isLink) {
-      props.component = NavLink;
-      props.to = tab.value;
+      tabProps.component = NavLink;
+      tabProps.to = tab.value;
     }
 
-    return props;
+    return tabProps;
   };
 
   return (
@@ -45,10 +44,29 @@ const Tabs: React.FC<PropsType> = ({ value = '', onChange, tabs = [], ...props }
       variant="scrollable"
       scrollButtons="auto"
       sx={{
-        backgroundColor: 'white',
-        border: '1px solid',
-        borderColor: 'rgba(226, 232, 240, 0.6)',
-        boxShadow: '0px 12px 32px rgba(15, 23, 42, 0.06)',
+        mt: 2,
+        mb: 0.5,
+        minHeight: 48,
+        backgroundColor: '#fff',
+        borderRadius: 3,
+        border: '1px solid rgba(226, 232, 240, 0.7)',
+        boxShadow: '0 10px 28px rgba(15, 23, 42, 0.05)',
+        px: 1,
+        '& .MuiTabs-indicator': {
+          height: 3,
+          borderRadius: '3px 3px 0 0',
+          bgcolor: 'primary.main',
+        },
+        '& .MuiTab-root': {
+          textTransform: 'none',
+          fontWeight: 650,
+          fontSize: 14.5,
+          minHeight: 48,
+          color: 'text.secondary',
+          '&.Mui-selected': {
+            color: 'primary.main',
+          },
+        },
       }}
       {...props}
     >

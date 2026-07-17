@@ -41,6 +41,7 @@ const ActionsDropdown: React.FC<PropsType> = ({ onDelete, id, label, onUpdate })
         open={open}
         onClose={handleClose}
         onClick={handleClose}
+        disableScrollLock={true}
         PaperProps={{
           elevation: 0,
           sx: {

@@ -28,7 +28,9 @@ const TextSubmitInput: React.FC<PropsType> = ({
   return (
     <Box display="flex" alignItems="center" gap={2} width="100%">
       <TextField
-        type="input"
+        minRows={3}
+        maxRows={8}
+        multiline
         name="text"
         value={text}
         size="small"

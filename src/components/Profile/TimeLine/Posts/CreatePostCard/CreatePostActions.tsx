@@ -5,8 +5,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Divider from '@mui/material/Divider';
-import PollOutlinedIcon from '@mui/icons-material/PollOutlined';
-import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import PhotoPickerField from '../../../../Fields/PhotoPickerField/PhotoPickerField';
 
 type PropsType = {
@@ -25,16 +23,6 @@ const CreatePostActions: React.FC<PropsType> = ({
       element: <PhotoPickerField onChange={onPhotoChange} label="Photo" />,
       type: 'photo',
     },
-    {
-      icon: <PollOutlinedIcon sx={{ color: '#F59E0B' }} />,
-      type: 'poll',
-      text: 'Poll',
-    },
-    {
-      icon: <SentimentSatisfiedOutlinedIcon sx={{ color: '#EC4899' }} />,
-      type: 'feeling',
-      text: 'Feeling',
-    },
   ];
 
   const clearInput = () => {
@@ -50,14 +38,16 @@ const CreatePostActions: React.FC<PropsType> = ({
           gap={1}
           px={1.5}
           py={0.5}
-          ml={{ xs: 2, sm: 9 }}
-          mb={2}
-          maxWidth="100%"
-          borderRadius="20px"
-          bgcolor="#F3F4F6"
+          mx={{ xs: 1.5, sm: 2.25 }}
+          mb={1.5}
+          maxWidth="calc(100% - 32px)"
+          borderRadius="999px"
+          bgcolor="rgba(88, 80, 236, 0.08)"
+          border="1px solid rgba(88, 80, 236, 0.12)"
         >
           <Typography
             variant="body2"
+            fontWeight={600}
             sx={{
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -83,35 +73,18 @@ const CreatePostActions: React.FC<PropsType> = ({
           </IconButton>
         </Box>
       )}
-      <Divider />
-      <Box display="flex" flexWrap="wrap" gap={1} p={{ xs: 1, sm: 2 }}>
+      <Divider sx={{ borderColor: 'rgba(226,232,240,0.85)' }} />
+      <Box
+        display="flex"
+        flexWrap="wrap"
+        alignItems="center"
+        gap={0.5}
+        px={{ xs: 1, sm: 1.5 }}
+        py={1}
+      >
         {actionButtons.map((item) => (
           <Box key={item.type}>
-            {item.element || (
-              <Box
-                display="flex"
-                alignItems="center"
-                gap={1}
-                px={{ xs: 1, sm: 2 }}
-                sx={{
-                  cursor: 'pointer',
-                  transition: 'all .2s ease',
-                  '&:hover': {
-                    backgroundColor: 'rgba(99,102,241,.06)',
-                    borderRadius: '12px',
-                  },
-                }}
-              >
-                {item.icon}
-                <Typography
-                  variant="body2"
-                  lineHeight={1}
-                  sx={{ display: { xs: 'none', sm: 'block' } }}
-                >
-                  {item.text}
-                </Typography>
-              </Box>
-            )}
+            {item.element}
           </Box>
         ))}
       </Box>

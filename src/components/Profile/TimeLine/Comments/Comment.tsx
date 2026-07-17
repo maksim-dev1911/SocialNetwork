@@ -37,54 +37,75 @@ const Comment: React.FC<PropsType> = ({
   };
 
   return (
-    <Box p="10px 16px 10px 16px" alignItems="center">
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Box display="flex" alignItems="center">
-          <Avatar>
-            <img src={comment.creatorAvatar} alt="author-avatar" />
-          </Avatar>
-          <Box>
-            <Typography fontSize="15px" fontFamily="Inter" ml={2}>
-              {comment.creatorFullName}
-            </Typography>
-            <Typography fontSize="12px" fontFamily="Inter" color="#374151" ml={2}>
-              {getRelativeTime(comment.createdAt)}
-            </Typography>
+    <Box py={1.25}>
+      <Box display="flex" alignItems="flex-start" gap={1.25}>
+        <Avatar
+          src={comment.creatorAvatar}
+          alt={comment.creatorFullName}
+          sx={{ width: 36, height: 36, flexShrink: 0 }}
+        />
+        <Box flex={1} minWidth={0}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" gap={1}>
+            <Box minWidth={0}>
+              <Typography fontSize={14} fontWeight={600} noWrap>
+                {comment.creatorFullName}
+              </Typography>
+              <Typography fontSize={11.5} color="text.secondary" fontWeight={500}>
+                {getRelativeTime(comment.createdAt)}
+              </Typography>
+            </Box>
+            <DropDown
+              id={comment.id}
+              label="Edit Comment"
+              onUpdate={setEditCommentMode}
+              onDelete={() => deleteComment(postId, comment.id)}
+            />
           </Box>
-        </Box>
-        <Box>
-          <DropDown
-            id={comment.id}
-            label="Edit Comment"
-            onUpdate={setEditCommentMode}
-            onDelete={() => deleteComment(postId, comment.id)}
-          />
+
+          {!isEditMode && (
+            <Box sx={sx.commentBubble}>
+              <Typography
+                fontSize={14}
+                color="text.primary"
+                sx={{ wordBreak: 'break-word', lineHeight: 1.5 }}
+              >
+                {comment.commentText}
+              </Typography>
+            </Box>
+          )}
+
+          {isEditMode && (
+            <Box mt={1.25}>
+              <TextField
+                fullWidth
+                multiline
+                minRows={2}
+                sx={sx.addPostInput}
+                onChange={(e) => setCommentText(e.currentTarget.value)}
+                defaultValue={comment.commentText}
+              />
+              <Box display="flex" alignItems="center" gap={1} mt={1.25} justifyContent="flex-end">
+                <Button
+                  onClick={() => setEditCommentMode({ editMode: false })}
+                  variant="outlined"
+                  size="small"
+                  sx={{ textTransform: 'none', borderRadius: '10px', fontWeight: 650 }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => updateComment(updateCommentData)}
+                  sx={{ textTransform: 'none', borderRadius: '10px', fontWeight: 650 }}
+                >
+                  Save
+                </Button>
+              </Box>
+            </Box>
+          )}
         </Box>
       </Box>
-      {!isEditMode && (
-        <Box mt={2}>
-          <Typography fontSize="15px" color="#374151" sx={{ wordBreak: 'break-word' }}>
-            {comment.commentText}
-          </Typography>
-        </Box>
-      )}
-      {isEditMode && (
-        <Box mt={2}>
-          <TextField
-            sx={sx.addPostInput}
-            onChange={(e) => setCommentText(e.currentTarget.value)}
-            defaultValue={comment.commentText}
-          />
-          <Box display="flex" alignItems="center" gap={2} mt={2} justifyContent="flex-end">
-            <Button onClick={() => setEditCommentMode({ editMode: false })} variant="outlined">
-              Cancel
-            </Button>
-            <Button variant="contained" onClick={() => updateComment(updateCommentData)}>
-              Save
-            </Button>
-          </Box>
-        </Box>
-      )}
     </Box>
   );
 };
