@@ -28,17 +28,12 @@ import {
 } from '../../store/profile/profile.thunks';
 import { useParams } from 'react-router-dom';
 import Preloader from '../../components/Common/Preloader/Preloader';
-import { Grid, Theme, useMediaQuery } from '@mui/material';
+import { Theme, useMediaQuery } from '@mui/material';
 import Tabs from '../../components/Common/Tabs/Tabs';
 import Friends from '../../components/Profile/Friends/Friends';
 import TimeLine from '../../components/Profile/TimeLine/TimeLine';
 import { PostFormDataType } from '../../components/Profile/TimeLine/Posts/Posts';
-import {
-  EditModeType,
-  PostCommentFormData,
-  UpdateCommentPayloadType,
-  UpdatePostPayloadType,
-} from '../../types/types';
+import { EditModeType, UpdateCommentPayloadType, UpdatePostPayloadType } from '../../types/types';
 import About from '../../components/Profile/TimeLine/About/About';
 import FriendsCard from '../../components/Profile/TimeLine/FriendsCard/FriendsCard';
 import { toggleLike } from '../../store/profile/profileSlice';
@@ -84,19 +79,19 @@ const Profile = () => {
     userId = '22912';
   }
 
-  useEffect(() => {
-    dispatch(getPostsThunk());
-    dispatch(getComments());
-    dispatch(getUserProfile(userId));
-    onPageChanged(currentPage);
-  }, [userId, dispatch, currentPage]);
-
   const onPageChanged = useCallback(
     (currentPage: number) => {
       dispatch(getUserFriends({ currentPage, pageSize }));
     },
     [dispatch, pageSize]
   );
+
+  useEffect(() => {
+    dispatch(getPostsThunk());
+    dispatch(getComments());
+    dispatch(getUserProfile(userId));
+    onPageChanged(currentPage);
+  }, [userId, dispatch, currentPage, onPageChanged]);
 
   const handleToggleLike = useCallback(
     (postId: number) => {
@@ -182,8 +177,8 @@ const Profile = () => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-beetwen">
-      <Box width="100%">
+    <Box display="flex" justifyContent="space-between" gap={{ xs: 0, md: 3 }} sx={{ minWidth: 0 }}>
+      <Box width="100%" minWidth={0}>
         <UserProfile
           currentUser={currentUser}
           isMobile={isMobile}
@@ -224,15 +219,21 @@ const Profile = () => {
           )}
         </Box>
       </Box>
-      {!isSm && (
-        <Grid item sm={4} md={5} width="500px">
+      {!isMobile && (
+        <Box
+          sx={{
+            width: { md: 300, lg: 340 },
+            flexShrink: 0,
+            pt: 0.5,
+          }}
+        >
           <About profile={profile} />
           <FriendsCard
             userFriends={userFriends}
             totalUsersCount={totalUsersCount}
             onClickToTabFriends={onClickToTabFriends}
           />
-        </Grid>
+        </Box>
       )}
     </Box>
   );

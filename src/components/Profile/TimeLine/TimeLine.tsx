@@ -1,9 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Grid } from '@mui/material';
+import Box from '@mui/material/Box';
 import {
   CommentType,
   EditModeType,
-  PostCommentFormData,
   ProfileType,
   UpdateCommentPayloadType,
   UpdatePostPayloadType,
@@ -27,7 +26,6 @@ type PropsType = {
 };
 
 const TimeLine: React.FC<PropsType> = ({
-  isSm,
   posts,
   profile,
   onPostCreate,
@@ -42,24 +40,22 @@ const TimeLine: React.FC<PropsType> = ({
   updatePost,
 }) => {
   return (
-    <Grid container mt={3} display="flex">
-      <Grid item sm={7} md={12} xs={12}>
-        <Posts
-          toggleLike={toggleLike}
-          posts={posts}
-          onPostCreate={onPostCreate}
-          onCommentCreate={onCommentCreate}
-          updateComment={updateComment}
-          profile={profile}
-          comments={comments}
-          deletePost={deletePost}
-          deleteComment={deleteComment}
-          editCommentMode={editCommentMode}
-          setEditCommentMode={setEditCommentMode}
-          updatePost={updatePost}
-        />
-      </Grid>
-    </Grid>
+    <Box mt={2.5} width="100%" minWidth={0}>
+      <Posts
+        toggleLike={toggleLike}
+        posts={posts}
+        onPostCreate={onPostCreate}
+        onCommentCreate={onCommentCreate}
+        updateComment={updateComment}
+        profile={profile}
+        comments={comments}
+        deletePost={deletePost}
+        deleteComment={deleteComment}
+        editCommentMode={editCommentMode}
+        setEditCommentMode={setEditCommentMode}
+        updatePost={updatePost}
+      />
+    </Box>
   );
 };
 

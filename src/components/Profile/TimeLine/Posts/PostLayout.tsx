@@ -28,76 +28,128 @@ const PostLayout: React.FC<PropsType> = ({
   toggleLike,
   toggleIsOpen,
 }) => {
+  const commentsCount = comments[post.id]?.length || 0;
+
   return (
     <Box>
-      <Box display="flex" p={2}>
-        <Avatar>
-          <img src={post.creatorAvatar} />
-        </Avatar>
-        <Box sx={{ width: '100%' }}>
-          <Typography ml={2} fontSize="15px">
+      <Box
+        display="flex"
+        alignItems="flex-start"
+        gap={1.5}
+        px={{ xs: 1.75, sm: 2.25 }}
+        pt={2.25}
+        pb={1.5}
+      >
+        <Avatar
+          src={post.creatorAvatar}
+          sx={{
+            width: 44,
+            height: 44,
+            boxShadow: '0 4px 12px rgba(15,23,42,0.12)',
+          }}
+        />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography fontSize={15} fontWeight={600} letterSpacing="-0.01em" noWrap color="#1e293b">
             {post.creatorFullName}
           </Typography>
-          <Typography ml={2} fontSize="12px" color="#89919E">
+          <Typography fontSize={12.5} color="text.secondary" fontWeight={500}>
             {getRelativeTime(post.createdAt)}
           </Typography>
         </Box>
-        <Box>
-          <DropDown
-            id={post.id}
-            label="Edit Post"
-            onDelete={deletePost}
-            onUpdate={setEditPostMode}
-          />
-        </Box>
+        <DropDown id={post.id} label="Edit Post" onDelete={deletePost} onUpdate={setEditPostMode} />
       </Box>
-      <Box sx={{ padding: '0 16px 16px 16px' }}>{post.text}</Box>
-      {post.photo && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            p: '16px',
-          }}
+
+      {post.text && (
+        <Typography
+          px={{ xs: 1.75, sm: 2.25 }}
+          pb={post.photo ? 1.5 : 2}
+          fontSize={15}
+          lineHeight={1.55}
+          color="text.primary"
+          sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
         >
+          {post.text}
+        </Typography>
+      )}
+
+      {post.photo && (
+        <Box px={{ xs: 1.25, sm: 2 }} pb={2}>
           <Box
             component="img"
             src={post.photo}
             alt=""
             sx={{
-              width: 'auto',
-              maxWidth: '100%',
-              maxHeight: 700,
+              width: '100%',
+              maxHeight: 560,
+              objectFit: 'cover',
               display: 'block',
               borderRadius: 3,
+              border: '1px solid rgba(226,232,240,0.8)',
             }}
           />
         </Box>
       )}
-      <Divider />
-      <Box p={2}>
-        <Box display="flex">
-          <Box
-            display="flex"
-            mr={2}
-            sx={{ cursor: 'pointer', '&:hover': { color: '#0056b3' } }}
-            onClick={() => toggleLike(post.id)}
-          >
-            {post.isLiked ? <FavoriteIcon sx={{ color: 'red' }} /> : <FavoriteBorderIcon />}
-            <Typography sx={{ color: '#666666' }} ml={1}>
-              {post.likedCount}
-            </Typography>
-          </Box>
-          <Box
-            display="flex"
-            onClick={toggleIsOpen}
-            sx={{ cursor: 'pointer', '&:hover': { color: '#0056b3' } }}
-          >
-            <SmsOutlinedIcon />
-            <Typography sx={{ color: '#666666' }} ml={1}>
-              {comments[post.id]?.length || 0}
-            </Typography>
-          </Box>
+
+      <Divider sx={{ borderColor: 'rgba(226,232,240,0.8)' }} />
+
+      <Box display="flex" alignItems="center" gap={1} px={{ xs: 1.25, sm: 1.75 }} py={1}>
+        <Box
+          onClick={() => toggleLike(post.id)}
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 1,
+            px: 1.5,
+            py: 0.85,
+            borderRadius: '12px',
+            cursor: 'pointer',
+            color: post.isLiked ? '#DC2626' : 'text.secondary',
+            bgcolor: post.isLiked ? 'rgba(239, 68, 68, 0.08)' : 'transparent',
+            fontWeight: 650,
+            fontSize: 14,
+            transition: 'background-color .15s ease, color .15s ease',
+            userSelect: 'none',
+            '&:hover': {
+              bgcolor: post.isLiked ? 'rgba(239, 68, 68, 0.12)' : 'rgba(88, 80, 236, 0.06)',
+              color: post.isLiked ? '#DC2626' : 'primary.main',
+            },
+          }}
+        >
+          {post.isLiked ? (
+            <FavoriteIcon fontSize="small" />
+          ) : (
+            <FavoriteBorderIcon fontSize="small" />
+          )}
+          <Typography component="span" fontSize={14} fontWeight={650}>
+            {post.likedCount}
+          </Typography>
+        </Box>
+
+        <Box
+          onClick={toggleIsOpen}
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 1,
+            px: 1.5,
+            py: 0.85,
+            borderRadius: '12px',
+            cursor: 'pointer',
+            color: 'text.secondary',
+            fontWeight: 650,
+            fontSize: 14,
+            transition: 'background-color .15s ease, color .15s ease',
+            userSelect: 'none',
+            '&:hover': {
+              bgcolor: 'rgba(88, 80, 236, 0.06)',
+              color: 'primary.main',
+            },
+          }}
+        >
+          <SmsOutlinedIcon fontSize="small" />
+          <Typography component="span" fontSize={14} fontWeight={650}>
+            {commentsCount}
+          </Typography>
         </Box>
       </Box>
     </Box>

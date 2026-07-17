@@ -1,7 +1,7 @@
 import React from 'react';
 import { UserType } from '../../types/types';
 import User from './User/User';
-import { Pagination, Stack } from '@mui/material';
+import { Pagination, Stack, Theme, useMediaQuery } from '@mui/material';
 
 type PropsType = {
   users: Array<UserType>;
@@ -26,25 +26,36 @@ const Users: React.FC<PropsType> = ({
   totalUsersCount,
   isSm,
 }) => {
+  const isXs = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
   return (
     <>
       <Stack
         bgcolor="#fff"
-        borderRadius="24px"
+        borderRadius={{ xs: '16px', sm: '24px' }}
         boxShadow="0px 8px 30px rgba(15, 23, 42, 0.05)"
         overflow="hidden"
         mt={4}
       >
         {users.map((user) => (
-          <User follow={follow} unfollow={unfollow} user={user} isLoading={isLoading} isSm={isSm} />
+          <User
+            key={user.id}
+            follow={follow}
+            unfollow={unfollow}
+            user={user}
+            isLoading={isLoading}
+            isSm={isSm}
+          />
         ))}
       </Stack>
-      <Stack display="flex" alignItems="center" mt={2}>
+      <Stack display="flex" alignItems="center" mt={2} sx={{ overflowX: 'auto', maxWidth: '100%' }}>
         <Pagination
           page={currentPage}
           onChange={pageChanged}
           count={Math.ceil(totalUsersCount / pageSize)}
-          size="large"
+          size={isXs ? 'small' : 'large'}
+          siblingCount={isXs ? 0 : 1}
+          boundaryCount={isXs ? 1 : 1}
           variant="outlined"
           color="primary"
         />

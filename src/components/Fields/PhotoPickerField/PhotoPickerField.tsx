@@ -18,18 +18,23 @@ const PhotoPickerField: React.FC<PropsType> = ({ onChange, label }) => {
         display="flex"
         alignItems="center"
         gap={1}
-        px={2}
         sx={{
           cursor: 'pointer',
           transition: 'all .2s ease',
+          px: { xs: 1.5, sm: 2.5 },
+          py: 0.85,
+          borderRadius: '12px',
           '&:hover': {
             backgroundColor: 'rgba(99,102,241,.06)',
-            borderRadius: '12px',
           },
         }}
       >
         <PhotoOutlinedIcon sx={{ color: '#6366F1' }} />
-        <Typography variant="body2" lineHeight={1}>
+        <Typography
+          variant="body2"
+          lineHeight={1}
+          sx={{ display: { xs: 'none', sm: 'block' } }}
+        >
           {label}
         </Typography>
       </Box>

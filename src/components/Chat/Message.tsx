@@ -8,53 +8,86 @@ import { Stack } from '@mui/material';
 type PropsType = {
   userMessage: UserMessageType;
   isGrouped: boolean;
+  isOwn: boolean;
 };
 
-const Message: React.FC<PropsType> = ({ userMessage, isGrouped }) => {
-  return (
-    <Stack direction="row" spacing={1.5} alignItems="flex-start">
+const AVATAR_SIZE = 36;
+
+const Message: React.FC<PropsType> = ({ userMessage, isGrouped, isOwn }) => {
+  const avatarSx = {
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
+    mb: 0.25,
+    boxShadow: '0 2px 8px rgba(15,23,42,.12)',
+    flexShrink: 0,
+  };
+
+  const avatarSlot = (
+    <Box
+      sx={{
+        width: AVATAR_SIZE,
+        height: AVATAR_SIZE,
+        flexShrink: 0,
+        visibility: isGrouped ? 'hidden' : 'visible',
+      }}
+    >
       {!isGrouped && (
-        <Avatar
-          src={userMessage?.photo}
-          sx={{
-            width: 42,
-            height: 42,
-            mt: 0.5,
-          }}
-        />
+        <Avatar src={userMessage?.photo} sx={avatarSx} />
       )}
+    </Box>
+  );
 
-      {isGrouped && <Box sx={{ width: 44 }} />}
+  return (
+    <Stack
+      direction="row"
+      spacing={1.25}
+      alignItems="flex-end"
+      justifyContent={isOwn ? 'flex-end' : 'flex-start'}
+      width="100%"
+    >
+      {!isOwn && avatarSlot}
 
-      <Box>
+      <Box
+        sx={{
+          maxWidth: { xs: '82%', sm: '68%' },
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: isOwn ? 'flex-end' : 'flex-start',
+        }}
+      >
         {!isGrouped && (
-          <Typography fontWeight={600} fontSize={14} lineHeight={1.2}>
-            {userMessage.userName}
+          <Typography
+            fontWeight={650}
+            fontSize={12.5}
+            lineHeight={1.2}
+            color="text.secondary"
+            sx={{ mb: 0.5, px: 0.5 }}
+          >
+            {isOwn ? 'You' : userMessage.userName}
           </Typography>
         )}
 
         <Box
           sx={{
-            mt: 0.5,
-            px: 2,
-            py: 1.25,
-
-            backgroundColor: '#fff',
-
-            border: '1px solid',
-            borderColor: 'divider',
-
-            borderRadius: '16px',
-
-            maxWidth: '550px',
+            px: 1.75,
+            py: 1.15,
+            bgcolor: isOwn ? 'primary.main' : '#fff',
+            color: isOwn ? '#fff' : 'text.primary',
+            border: isOwn ? 'none' : '1px solid rgba(226,232,240,.9)',
+            borderRadius: isOwn ? '18px 18px 6px 18px' : '18px 18px 18px 6px',
             width: 'fit-content',
-
-            boxShadow: '0 1px 3px rgba(0,0,0,.05)',
-
-            transition: 'all .15s ease',
-
+            maxWidth: '100%',
+            boxSizing: 'border-box',
+            wordBreak: 'break-word',
+            boxShadow: isOwn
+              ? '0 8px 20px rgba(88, 80, 236, 0.28)'
+              : '0 4px 14px rgba(15, 23, 42, 0.06)',
+            transition: 'transform .15s ease, box-shadow .15s ease',
             '&:hover': {
-              boxShadow: '0 3px 10px rgba(0,0,0,.08)',
+              transform: 'translateY(-1px)',
+              boxShadow: isOwn
+                ? '0 10px 24px rgba(88, 80, 236, 0.34)'
+                : '0 8px 20px rgba(15, 23, 42, 0.1)',
             },
           }}
         >
@@ -62,12 +95,17 @@ const Message: React.FC<PropsType> = ({ userMessage, isGrouped }) => {
             variant="body1"
             sx={{
               wordBreak: 'break-word',
+              fontSize: 15,
+              lineHeight: 1.5,
+              whiteSpace: 'pre-wrap',
             }}
           >
             {userMessage.message}
           </Typography>
         </Box>
       </Box>
+
+      {isOwn && avatarSlot}
     </Stack>
   );
 };

@@ -2,25 +2,31 @@ import {StylesRecord} from "../../interfaces/Styles";
 
 const sx: StylesRecord = {
     avatarContainer: () => ({
-        borderColor: "rgb(210, 214, 219)",
+        borderColor: "rgba(88, 80, 236, 0.3)",
         borderRadius: "50%",
         borderStyle: "dashed",
-        borderWidth: "1px",
+        borderWidth: "2px",
         padding: "4px",
+        transition: 'all 0.2s ease',
+        '&:hover': {
+            borderColor: 'rgba(88, 80, 236, 0.5)',
+            transform: 'scale(1.02)',
+        },
     }),
     selectButton: () => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        transition: "300ms",
+        transition: "all 0.2s ease",
         borderRadius: "50%",
         color: "rgba(0,0,0, 0)",
         height: "100%",
+        backdropFilter: 'blur(4px)',
         '&:hover': {
-            background: "rgba(47, 55, 70, 0.5)",
+            background: "rgba(88, 80, 236, 0.15)",
             borderRadius: "50%",
-            color: "white",
-            transition: "300ms",
+            color: "#5850EC",
+            transition: "all 0.2s ease",
         }
     }),
     selectButtonContainer: () => ({
@@ -31,7 +37,8 @@ const sx: StylesRecord = {
         bottom: 0,
     }),
     fieldStyle: () => ({
-        width: '500px'
+        width: '100%',
+        maxWidth: 500,
     })
 }
 

@@ -18,9 +18,14 @@ const ErrorLayout: React.FC<PropsType> = ({image, description, title, clearError
     const userId = useAppSelector(currentUserIdSelector);
 
     return (
-        <Box p={{xs: 3, sm: 10}} textAlign='center' sx={{backgroundColor: '#fff'}}>
-            <img src={image} alt='404'/>
-            <Typography sx={{fontSize: '34px', fontWeight: 'bold', pt: 4}}>{title}</Typography>
+        <Box p={{xs: 3, sm: 10}} textAlign='center' sx={{backgroundColor: '#fff', overflow: 'hidden'}}>
+            <Box
+                component="img"
+                src={image}
+                alt='404'
+                sx={{ maxWidth: '100%', height: 'auto' }}
+            />
+            <Typography sx={{fontSize: { xs: '24px', sm: '34px' }, fontWeight: 'bold', pt: 4}}>{title}</Typography>
             <Typography sx={{color: 'rgb(54, 65, 82)', pt: 2}}>{description}</Typography>
             <Button
                 component={Link}

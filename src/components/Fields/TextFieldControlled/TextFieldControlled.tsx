@@ -1,5 +1,12 @@
-import React, { ChangeEventHandler } from 'react';
-import { SxProps, TextField, Theme } from '@mui/material';
+import React from 'react';
+import {
+  FilledInputProps,
+  InputProps,
+  OutlinedInputProps,
+  SxProps,
+  TextField,
+  Theme,
+} from '@mui/material';
 import { Field } from 'react-final-form';
 import { FieldValidator } from 'final-form';
 
@@ -19,6 +26,12 @@ type PropsType = {
   accept?: string;
   defaultValue?: string;
   rows?: number;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
+  InputProps?:
+    | Partial<InputProps>
+    | Partial<FilledInputProps>
+    | Partial<OutlinedInputProps>
+    | undefined;
 };
 
 const TextFieldControlled: React.FC<PropsType> = ({
@@ -36,6 +49,8 @@ const TextFieldControlled: React.FC<PropsType> = ({
   rows,
   defaultValue,
   fullWidth,
+  onKeyDown,
+  InputProps,
 }) => {
   return (
     <Field name={name} type={type} validate={validate}>
@@ -54,10 +69,14 @@ const TextFieldControlled: React.FC<PropsType> = ({
             minRows={minRows}
             maxRows={maxRows}
             placeholder={placeholder}
+            InputProps={InputProps}
             hidden={hidden}
             defaultValue={defaultValue}
             rows={rows}
             fullWidth={fullWidth}
+            onKeyDown={(event) => {
+              onKeyDown?.(event);
+            }}
           />
         );
       }}

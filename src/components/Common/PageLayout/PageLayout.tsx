@@ -17,6 +17,7 @@ const PageLayout: React.FC<PropsType> = ({ children, title, description }) => {
         sx={{
           letterSpacing: '-0.04em',
           color: 'text.primary',
+          fontSize: { xs: '1.5rem', sm: '2.125rem' },
         }}
       >
         {title}
@@ -28,6 +29,7 @@ const PageLayout: React.FC<PropsType> = ({ children, title, description }) => {
           mt: 0.5,
           color: 'text.secondary',
           fontWeight: 500,
+          fontSize: { xs: '0.875rem', sm: '1rem' },
         }}
       >
         {description}

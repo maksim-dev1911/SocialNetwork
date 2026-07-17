@@ -17,9 +17,15 @@ const SideBar: React.FC<PropsType> = ({ open, setClose, userId, profile, isMobil
   return (
     <SideBarDrawer open={open} isMobile={isMobile} onClose={setClose}>
       {open && (
-        <SideBarIsExpanded setClose={setClose} profile={profile} userId={userId} userMe={userMe} />
+        <SideBarIsExpanded
+          setClose={setClose}
+          profile={profile}
+          userId={userId}
+          userMe={userMe}
+          isMobile={isMobile}
+        />
       )}
-      {!open && <SideBarIsSmall profile={profile} userId={userId} />}
+      {!open && !isMobile && <SideBarIsSmall profile={profile} userId={userId} />}
     </SideBarDrawer>
   );
 };

@@ -40,7 +40,7 @@ const AccountMenu: React.FC<PropsType> = ({currentUserProfile, openModal}) => {
                     <IconButton
                         onClick={handleClick}
                         size="small"
-                        sx={{ml: 2}}
+                        sx={{ml: { xs: 0.5, sm: 2 }}}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
@@ -56,6 +56,7 @@ const AccountMenu: React.FC<PropsType> = ({currentUserProfile, openModal}) => {
                 open={open}
                 onClose={handleClose}
                 onClick={handleClose}
+                disableScrollLock={true}
                 PaperProps={{
                     elevation: 0,
                     sx: {

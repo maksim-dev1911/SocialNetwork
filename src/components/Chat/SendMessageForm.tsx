@@ -1,9 +1,10 @@
 import React from 'react';
 import { Form } from 'react-final-form';
-import { Paper, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import TextFieldControlled from '../Fields/TextFieldControlled/TextFieldControlled';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
+import { sx } from './Messages.style';
 
 export type FormValues = {
   message: string;
@@ -15,76 +16,75 @@ type PropsType = {
 
 const SendMessageForm: React.FC<PropsType> = ({ onSubmit }) => {
   return (
-    <Stack mt={5}>
+    <Box sx={sx.composer}>
       <Form<FormValues>
         onSubmit={(values, form) => {
           onSubmit(values);
-
-          form.reset();
+          form.restart();
         }}
-        render={({ handleSubmit, values, submitting, form }) => {
+        render={({ handleSubmit, values, submitting }) => {
+          const canSend = Boolean(values.message?.trim()) && !submitting;
+
           return (
-            <Paper
-              elevation={0}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                p: 1,
-                borderRadius: 4,
-                border: '1px solid',
-                borderColor: 'divider',
-                bgcolor: 'background.paper',
-              }}
-            >
-              <form
-                style={{ display: 'flex', alignItems: 'center', gap: 5, width: '100%' }}
-                onSubmit={handleSubmit}
-              >
-                <TextFieldControlled
-                  fullWidth
-                  multiline
-                  placeholder="Введите сообщение..."
-                  name="message"
-                  type="text"
-                  InputProps={{
-                    disableUnderline: true,
-                  }}
+            <Box component="form" onSubmit={handleSubmit} sx={sx.composerPaper}>
+              <TextFieldControlled
+                fullWidth
+                multiline
+                maxRows={4}
+                placeholder="Write a message..."
+                name="message"
+                type="text"
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    if (canSend) {
+                      handleSubmit();
+                    }
+                  }
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    border: 'none',
+                  },
+                  '& .MuiInputBase-root': {
+                    fontSize: 15,
+                    py: 0.5,
+                    alignItems: 'center',
+                  },
+                  '& textarea': {
+                    lineHeight: 1.55,
+                  },
+                }}
+              />
+              <Stack>
+                <LoadingButton
+                  disabled={!canSend}
+                  loading={submitting}
+                  type="submit"
+                  variant="contained"
+                  aria-label="Send message"
                   sx={{
-                    px: 1,
-
-                    '& .MuiInputBase-root': {
-                      fontSize: 15,
-                    },
-
-                    '& textarea': {
-                      lineHeight: 1.6,
+                    minWidth: 44,
+                    width: 44,
+                    height: 44,
+                    borderRadius: '50%',
+                    boxShadow: canSend ? '0 8px 18px rgba(88, 80, 236, 0.35)' : 'none',
+                    bgcolor: canSend ? 'primary.main' : 'action.disabledBackground',
+                    color: '#fff',
+                    '&:hover': {
+                      bgcolor: 'primary.dark',
+                      boxShadow: '0 10px 22px rgba(88, 80, 236, 0.4)',
                     },
                   }}
-                />
-                <Stack>
-                  <LoadingButton
-                    disabled={!values.message?.trim() || submitting}
-                    loading={submitting}
-                    type="submit"
-                    color="primary"
-                    sx={{
-                      minWidth: 44,
-                      width: 44,
-                      height: 44,
-                      borderRadius: '50%',
-                      boxShadow: 2,
-                    }}
-                  >
-                    <SendRoundedIcon />
-                  </LoadingButton>
-                </Stack>
-              </form>
-            </Paper>
+                >
+                  <SendRoundedIcon fontSize="small" />
+                </LoadingButton>
+              </Stack>
+            </Box>
           );
         }}
       />
-    </Stack>
+    </Box>
   );
 };
 
