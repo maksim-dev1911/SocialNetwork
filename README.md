@@ -1,46 +1,104 @@
-# Getting Started with Create React App
+# Social Network
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SPA социальной сети на React: профили, лента постов, поиск пользователей, подписки и общий чат в реальном времени.
 
-## Available Scripts
+Бэкенд — учебный API [social-network.samuraijs.com](https://social-network.samuraijs.com).
 
-In the project directory, you can run:
+## Возможности
 
-### `npm start`
+- **Авторизация** — вход, captcha при необходимости, выход, защита приватных маршрутов
+- **Профиль** — просмотр своего и чужого профиля, аватар, статус, контакты, вкладки Timeline / Friends
+- **Лента** — создание, редактирование и удаление постов с фото; комментарии и лайки (хранение в `localStorage`)
+- **Люди** — список пользователей с пагинацией, follow / unfollow
+- **Чат** — общий чат через WebSocket
+- **Настройки** — редактирование профиля (имя, about, job, соцсети)
+- **Адаптивный UI** — сайдбар, мобильный drawer, Material UI тема
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Стек
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+| Слой | Технологии |
+|------|------------|
+| UI | React 18, TypeScript, MUI 5, styled-components, Sass |
+| Состояние | Redux Toolkit, React Redux |
+| Формы | React Final Form |
+| Роутинг | React Router Dom 6 |
+| HTTP / WS | Axios, WebSocket |
+| Сборка | Create React App (`react-scripts`) |
 
-### `npm test`
+## Структура проекта
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+src/
+├── api/            # Axios-клиент и WebSocket
+├── components/     # UI-компоненты (Profile, Chat, SideBar, Fields, …)
+├── pages/          # Страницы: Auth, Profile, Chat, People, Settings
+├── store/          # Redux slices и thunks (auth, profile, people, chat, app)
+├── hoc/            # withAuthGuard
+├── hooks/          # typed useAppDispatch / useAppSelector
+├── storage/        # localStorage для постов и комментариев
+├── services/       # валидаторы форм
+├── types/          # общие TypeScript-типы
+└── utils/
+```
 
-### `npm run build`
+### Маршруты
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Путь | Описание |
+|------|----------|
+| `/login` | Вход |
+| `/resetPass` | Сброс пароля |
+| `/profile/:userId?` | Профиль |
+| `/people` | Пользователи |
+| `/chat` | Общий чат |
+| `/settings` | Настройки профиля |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Приватные страницы обёрнуты в `withAuthGuard` (редирект на `/login`).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Быстрый старт
 
-### `npm run eject`
+### Требования
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Node.js 16+
+- npm
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Установка
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### API-ключ
 
-## Learn More
+Ключ API задаётся в `src/api/index.ts` (заголовок `API-KEY`). Получить ключ можно на [social-network.samuraijs.com](https://social-network.samuraijs.com) после регистрации.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> Для локальной разработки можно использовать тестовый аккаунт с сайта API (например `free@samuraijs.com` / `free`).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Запуск
+
+```bash
+npm start
+```
+
+Приложение откроется на [http://localhost:3000](http://localhost:3000).
+
+### Сборка и тесты
+
+```bash
+npm run build   # production-сборка в build/
+npm test        # Jest + React Testing Library
+```
+
+## Архитектура
+
+1. При старте `initializeApp` проверяет сессию (`auth/me`) и снимает прелоадер.
+2. Данные с API идут через Axios (`withCredentials: true`) в Redux thunks → slices.
+3. Посты и комментарии ленты живут в `localStorage` (`src/storage/posts.ts`) — отдельный клиентский слой поверх профиля API.
+4. Чат подключается к `wss://social-network.samuraijs.com/handlers/ChatHandler.ashx`.
+
+## Скриншоты / демо
+
+_Добавьте скриншоты или ссылку на деплой при необходимости._
+
+## Лицензия
+
+Private project (`"private": true` в `package.json`).

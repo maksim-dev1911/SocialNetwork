@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../../images/logo.png';
+import logo2Img from '../../images/logo2.png';
 import IconButton from '@mui/material/IconButton';
 import KeyboardDoubleArrowRightOutlinedIcon from '@mui/icons-material/KeyboardDoubleArrowRightOutlined';
 import Divider from '@mui/material/Divider';
@@ -19,9 +19,18 @@ type PropsType = {
 
 const SideBarIsExpanded: React.FC<PropsType> = ({ setClose, userId, profile, isMobile }) => {
   return (
-    <Box width={300} sx={{ height: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Box
+      width={300}
+      sx={{ height: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column' }}
+    >
       <Box display="flex" p="20px" justifyContent="space-between" alignItems="center">
-        <img alt="logo" src={logoImg} />
+        <Box sx={{ width: { xs: 120, sm: 140, md: 160 } }}>
+          <img
+            alt="logo"
+            src={logo2Img}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </Box>
         <IconButton onClick={setClose}>
           <KeyboardDoubleArrowRightOutlinedIcon />
         </IconButton>
