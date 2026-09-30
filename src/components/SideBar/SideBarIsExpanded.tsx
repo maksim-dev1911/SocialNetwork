@@ -23,7 +23,7 @@ const SideBarIsExpanded: React.FC<PropsType> = ({ setClose, userId, profile, isM
       width={300}
       sx={{ height: '100%', minHeight: '100%', display: 'flex', flexDirection: 'column' }}
     >
-      <Box display="flex" p="20px" justifyContent="space-between" alignItems="center">
+      <Box display="flex" p="8px" justifyContent="space-between" alignItems="center">
         <Box sx={{ width: { xs: 120, sm: 140, md: 160 } }}>
           <img
             alt="logo"
