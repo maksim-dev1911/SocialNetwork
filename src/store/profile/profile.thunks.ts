@@ -17,7 +17,6 @@ import { PostFormDataType, PostType } from '../../components/Profile/TimeLine/Po
 import { RootState } from '../index';
 import {
   CommentType,
-  PostCommentFormData,
   UpdateCommentPayloadType,
   UpdatePostPayloadType,
 } from '../../types/types';
@@ -133,11 +132,6 @@ export const deletePost = createAsyncThunk<void, number>(
     dispatch(setAllComments(updatedComments));
   }
 );
-
-type CreateCommentPayload = {
-  postId: number;
-  formData: PostCommentFormData;
-};
 
 export const getPostsThunk = createAsyncThunk<PostType[]>(
   'posts/getPosts',

@@ -33,7 +33,7 @@ const BaseLayout = () => {
 
   useEffect(() => {
     dispatch(getCurrentUserProfile(userId));
-  }, [userId]);
+  }, [dispatch, userId]);
 
   const handleToggleDrawer = useCallback(() => {
     setOpen((prev) => !prev);
@@ -46,7 +46,7 @@ const BaseLayout = () => {
   const handleLogout = useCallback(() => {
     dispatch(signUp());
     navigate('login');
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const renderModal = () => (
     <Modal fnToAccept={handleLogout} openModal={isModalOpen} closeModal={closeModal} />

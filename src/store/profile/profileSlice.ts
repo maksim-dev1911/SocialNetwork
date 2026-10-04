@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CommentType, PhotosType, ProfileType, UserType } from '../../types/types';
-import { PostFormDataType, PostType } from '../../components/Profile/TimeLine/Posts/Posts';
-import { DataUpdatedPost } from './profile.thunks';
+import { PostType } from '../../components/Profile/TimeLine/Posts/Posts';
 
 type initialStateType = {
   profile: ProfileType | null;

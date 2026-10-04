@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { signIn } from '../../../store/auth/auth.thunks';
@@ -26,9 +26,12 @@ const Login = () => {
   const error = useAppSelector(errorSelector);
   const captchaUrl = useAppSelector(captchaUrlSelector);
 
-  const handleSubmit = useCallback(async (data: ILoginData) => {
-    await dispatch(signIn(data));
-  }, []);
+  const handleSubmit = useCallback(
+    async (data: ILoginData) => {
+      await dispatch(signIn(data));
+    },
+    [dispatch]
+  );
 
   if (isFetching) {
     return <Preloader />;
