@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/1.0/:path*",
+      "destination": "https://samuraijs.com*"
+    }
+  ]
+}
